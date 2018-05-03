@@ -1,0 +1,272 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <title>openlayers flashmarker</title>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0, user-scalable=no">
+    <link rel="stylesheet" href="./css/openlayers/style.css" type="text/css">
+    <script type="text/javascript" src="./js/OpenLayers.js"></script>
+    <script type="text/javascript" src="./js/openlayers-line.js"></script>
+    <style>
+        html,
+        body {
+            background-image:url('ImageResources/mainPage/background.png');
+            background-size:100vw 100vh;
+            /*background-size:100%;*/
+            background-repeat: no-repeat;
+
+            width: 100%;
+            height: 100%;
+            margin: 0;
+            padding: 0;
+            overflow: hidden;
+        }
+
+        .frameImage {
+            background-image:url('ImageResources/mainPage/frames.png');
+            /*background-size: 100% auto;*/
+            background-repeat: no-repeat;
+            width:100%;
+            height: 91%;
+            background-size: 100vw 91vh;
+            position: absolute;
+            left:0vh;
+            top: 9vh;
+            margin: 0px;
+            z-index: 10;
+            pointer-events: none;
+
+        }
+        * {
+            box-sizing: border-box;
+        }
+        .menuButton  {
+            /*display: inline-block;*/
+            background-image: url(ImageResources/mainPage/buttonUnselect.png);
+            background-size:  100% ;
+            background-position: top;
+            background-repeat: no-repeat;
+            /*border: 1px solid red;*/
+            margin: 0.75vh 0px 0px 0px;
+            padding: 2.8vh 0vh 1.55vh 0vh ;
+            width: 11.4%;
+            float: left;
+            text-align: center;
+            color: white;
+            border:0px;
+            cursor: pointer;
+            background-color: transparent;
+            font-size: 1.1vw;
+            outline:none;
+        }
+        .menuButtonActive{
+            background-image: url(ImageResources/mainPage/buttonSelected.png);
+            background-size:  100% ;
+            background-position: top;
+            background-repeat: no-repeat;
+            /*border: 1px solid red;*/
+            margin: 0.75vh 0px 0px 0px;
+            padding: 2.8vh 0vh 1.55vh 0vh ;
+            width: 11.4%;
+            float: left;
+            text-align: center;
+            color: white;
+            border:0px;
+            cursor: pointer;
+            background-color: transparent;
+            font-size: 1.1vw;
+            outline:none;
+        }
+        a.active {
+            background-image: url(ImageResources/mainPage/buttonSelected.png);
+        }
+        a:hover{
+            background-image: url(ImageResources/mainPage/buttonSelected.png);
+            color: black;
+        }
+        .titleButton {
+            background-image: url(ImageResources/mainPage/title.png);
+            background-size:  100% 100%;
+            background-position: right bottom, left top;
+            background-repeat: no-repeat;
+            /*border: 1px solid red;*/
+            padding: 5.2vh 0vh 6vh 0vh ;
+            width: 24.7%;
+            float: left;
+            text-align: center;
+            color: white;
+            font-size: 1.5vw;
+            z-index: 1000;
+            position:relative ;
+        }
+        .blank-border {
+            /*border: 1px solid red;*/
+            padding: 1% 0.3%;
+            width:1.5%;
+            float: left;
+        }
+        .blank {
+            /*border: 1px solid red;*/
+            padding: 1% 0%;
+            width:0.65%;
+            float: left;
+        }
+        .row:after {
+            content: "";
+            clear: both;
+            display: block;
+
+        }
+        .menuRow {
+            z-index:999;
+            height:9%;
+        }
+        .frameRow {
+            /*z-index:0;*/
+            height: 91%;
+        }
+
+        #map {
+            width:100%;
+            height: 91%;
+            position: absolute;
+            left:0vh;
+            top: 9vh;
+            opacity: 0.7;
+            z-index: 1;
+        }
+    </style>
+</head>
+
+<body>
+
+    <div class="menuRow">
+    <!--<div class="row">-->
+        <div class="blank-border"></div>
+        <a class="menuButtonActive" >IP定位</a>
+        <div class="blank"></div>
+        <a class="menuButton" >地标数据</a>
+        <div class="blank"></div>
+        <a class="menuButton" >拓扑探测</a>
+        <div class="blank"></div>
+        <div class="titleButton" >网络地理综合态势显示</div>
+        <div class="blank"></div>
+        <a class="menuButton" >微信定位</a>
+        <div class="blank"></div>
+        <a class="menuButton" >微博定位</a>
+        <div class="blank"></div>
+        <a class="menuButton" >探测源</a>
+        <div class="blank-border"></div>
+    <!--</div>-->
+</div>
+    <div class="frameRow" name="page">
+        <div class="frameImage"></div>
+        <div id="map"></div>
+    </div>
+
+
+    <script type="text/javascript">
+    
+        var base_layer = new OpenLayers.Layer.OSM("OpenStreetMap", null, {
+                        transitionEffect: "resize",
+                        attribution: "&copy; <a href='http://www.openstreetmap.org/copyright'>OpenStreetMap</a> contributors",
+                        eventListeners: {
+                            tileloaded: function(evt) {
+                                //反色
+                                var ctx = evt.tile.getCanvasContext();
+                                if (ctx) {
+                                    var imgd = ctx.getImageData(0, 0, evt.tile.size.w, evt.tile.size.h);
+                                    
+                                    
+                                    var pix = imgd.data;
+                                    var r,g,b;
+                                    for (var i = 0, n = pix.length; i < n; i += 4) {
+                                        r = pix[i];
+                                        g = pix[i+1];
+                                        b = pix[i+2];
+                                        
+                                        
+                                        
+                                        var v = 0.299 * r+ 0.587 * g + 0.114 *b;
+                                        
+                                        pix[i] = 200 - r;
+                                        pix[i+1] = 220 - g;
+                                        pix[i+2] = 255 - b;
+                                        
+                                    }
+                                    ctx.putImageData(imgd, 0, 0);
+                                    
+                                    
+                                    evt.tile.imgDiv.removeAttribute("crossorigin");
+                                    evt.tile.imgDiv.src = ctx.canvas.toDataURL();
+                                }
+                            }
+                        }
+                    });
+        function init() {
+            var map = new OpenLayers.Map({
+                div: "map",
+                theme: null,
+                controls: [
+                    new OpenLayers.Control.Navigation(),
+                    new OpenLayers.Control.Attribution(),
+                    new OpenLayers.Control.TouchNavigation({
+                        dragPanOptions: {
+                            enableKinetic: true
+                        }
+                    }),
+                    new OpenLayers.Control.Zoom()
+                ],
+                layers: [base_layer]
+            });
+            
+            map.setCenter(new OpenLayers.LonLat(113.270793, 29.135308).transform(
+                new OpenLayers.Projection("EPSG:4326"),
+                map.getProjectionObject()
+            ), 5);
+            
+            //ip定位显示数据格式
+            var opt = {
+                //要显示的点
+                //经纬度、类型(起点、中间点、终点)、所属路径
+                points:[
+                    {lonlat:['113.270793', '23.135308'],type:1,path:1},
+                    {lonlat:['119.612787', '29.317599'],type:1,path:1},
+                    {lonlat:['116.413554', '39.911013'],type:1,path:1},
+                    {lonlat:['109.518646', '18.258217'],type:1,path:1},
+                    {lonlat:['113.603757', '24.816174'],type:1,path:1},
+                    
+                ],
+                //线段起点、线段终点、所属路径
+                lines:[
+                    {from:['113.270793', '23.135308'],to:['119.612787', '29.317599'],path:1},
+                    {from:['119.612787', '29.317599'],to:['116.413554', '39.911013'],path:2},
+                    {from:['116.413554', '39.911013'],to:['109.518646', '18.258217'],path:2},
+                    {from:['109.518646', '18.258217'],to:['113.603757', '24.816174'],path:2},
+                ],
+                //线条宽度
+                lineWidth: 2,
+                //线条颜色
+                strokeStyle: '#FFFF78',
+                //移动点半径
+                moveLineWidth:5,
+                //移动点颜色
+                moveLineColor:'#FFFF78',
+                //移动点阴影颜色
+                moveLineShadowColor: '#FFFFFF',
+                //移动点阴影大小
+                moveLineShadowBlur: 10,
+            };
+            
+            var moveline = new MoveLine(map, opt);
+        }
+
+        if (document.all) {
+            window.attachEvent('onload', init);
+        } else {
+            window.addEventListener('load', init, false);
+        }
+    </script>
+</body>
+</html>

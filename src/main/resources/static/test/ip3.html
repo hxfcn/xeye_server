@@ -1,0 +1,150 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <title>openlayers flashmarker</title>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0, user-scalable=no">
+    <!--<link rel="stylesheet" href="./css/openlayers/style.css" type="text/css">
+    <script type="text/javascript" src="./js/OpenLayers.js"></script>
+    <script type="text/javascript" src="./js/openlayers-line.js"></script>-->
+    
+    <link rel="stylesheet" href="./css/openlayers/ol.css" type="text/css">
+    <script type="text/javascript" src="./js/ol.js"></script>
+    <style>
+        html,
+        body {
+            width: 100%;
+            height: 100%;
+            margin: 0;
+            padding: 0;
+            overflow: hidden;
+        }
+
+        #map {
+            width: 100%;
+            height: 100%;
+        }
+    </style>
+</head>
+
+<body>
+    <div id="map"></div>
+    <script type="text/javascript">
+    
+    
+        var map = new ol.Map({
+            layers: [
+                new ol.layer.Tile({
+                    source: new ol.source.OSM()
+                })
+            ],
+        target: 'map',
+        view: new ol.View({
+            center: [0, 0],
+            zoom: 3
+            })
+        });   
+                        
+        //ip定位显示数据格式
+        var opt = {
+            //要显示的点
+            //经纬度、类型(起点、中间点、终点)、所属路径
+            points:[
+                {lonlat:['113.270793', '23.135308'],type:1,path:1},
+                {lonlat:['112.612787', '27.317599'],type:1,path:1},
+                {lonlat:['116.413554', '39.911013'],type:1,path:1},
+                {lonlat:['109.518646', '18.258217'],type:1,path:1},
+                {lonlat:['113.603757', '24.816174'],type:1,path:1},
+                
+            ],
+            //线段起点、线段终点、所属路径
+            lines:[
+                {from:['113.270793', '23.135308'],to:['112.612787', '27.317599'],path:1},
+                {from:['112.612787', '27.317599'],to:['116.413554', '39.911013'],path:2},
+                {from:['116.413554', '39.911013'],to:['109.518646', '18.258217'],path:2},
+                {from:['109.518646', '18.258217'],to:['113.603757', '24.816174'],path:2},
+            ],
+            //线条宽度
+            lineWidth: 2,
+            //线条颜色
+            strokeStyle: '#F8AB60',
+            //移动点半径
+            moveLineWidth:4,
+            //移动点颜色
+            moveLineColor:'#F8AB60',
+            //移动点阴影颜色
+            moveLineShadowColor: '#FFDDEE',
+            //移动点阴影大小
+            moveLineShadowBlur: 3,
+        };            
+        
+        
+        
+    var imageStyle = new ol.style.Style({
+        image: new ol.style.Circle({
+          radius: 5,
+          snapToPixel: false,
+          fill: new ol.style.Fill({color: 'yellow'}),
+          stroke: new ol.style.Stroke({color: 'red', width: 1})
+        })
+      });
+
+      var headInnerImageStyle = new ol.style.Style({
+        image: new ol.style.Circle({
+          radius: 2,
+          snapToPixel: false,
+          fill: new ol.style.Fill({color: 'blue'})
+        })
+      });
+
+      var headOuterImageStyle = new ol.style.Style({
+        image: new ol.style.Circle({
+          radius: 5,
+          snapToPixel: false,
+          fill: new ol.style.Fill({color: 'black'})
+        })
+      });
+        
+                        
+        var n = 200;
+        var omegaTheta = 30000; // Rotation period in ms
+        var R = 7e6;
+        var r = 2e6;
+        var p = 2e6;
+        
+        var rrr = 10.0;
+        map.on('postcompose', function(event) {
+            var context = event.context;
+
+        
+
+        
+        context.save();
+        context.beginPath();
+
+        context.strokeStyle = '#f3a';
+        context.shadowColor = '#f3a';
+        context.shadowBlur = 10;
+        context.lineWidth = 3;
+
+        
+        context.moveTo(300 + rrr, 300);
+        context.arc(300, 300, rrr, 0, Math.PI * 2);
+        context.stroke();
+        context.closePath();
+        context.restore();
+        rrr += 0.1;
+        if(rrr > 30.0){
+            rrr = 10.0;
+        }
+
+
+            map.render();
+            });
+        map.render();
+                        
+
+    </script>
+</body>
+</html

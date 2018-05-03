@@ -1,0 +1,182 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <title>地标显示</title>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <!--<link rel="stylesheet" href="./css/openlayers/style.css" type="text/css">
+    <script type="text/javascript" src="./js/OpenLayers.js"></script>
+    <script type="text/javascript" src="./js/openlayers-line.js"></script>-->
+    
+    <link rel="stylesheet" href="./css/openlayers/ol.css" type="text/css">
+     <script type="text/javascript" src="./js/ol-debug.js"></script>
+    <!--<script type="text/javascript" src="./js/ol.js"></script> -->
+    <script type="text/javascript" src="./js/jquery.js"></script>
+    <script type="text/javascript" src="./js/common.js"></script>
+    <style>
+        html,
+        body {
+            width: 100%;
+            height: 100%;
+            margin: 0;
+            padding: 0;
+            overflow: hidden;
+        }
+
+        #map {
+            width: 100%;
+            height: 100%;
+        }
+    </style>
+</head>
+
+<body>
+    <div id="map"></div>
+    <script type="text/javascript">
+    
+    var g_styles = [];
+    for(var i = 1; i < 4; i++){
+    	var ci = new ol.style.Style({
+            image: new ol.style.Icon({
+            	src:'ImageResources/dibiao/' + i + '.png',
+            	scale:1.0
+            }),
+            text:new ol.style.Text({
+            	font:'12px 微软雅黑',
+            	fill : new ol.style.Fill({
+            		color:'#fff'
+            	}),
+            	/*stroke: new ol.style.Stroke({
+            		color:'#f00',
+            		width:3
+            	}),*/
+            	offsetX:0,
+            	offsetY:0,
+            	text:''
+            })
+        });
+    	g_styles.push(ci);
+    }
+    
+    var g_zlevel = 0;
+        var wgs84 = ol.proj.get('EPSG:4326');
+    	var old_ext,old_res;
+        var vectorSource = new ol.source.Vector({
+            format: new ol.format.GeoJSON(),
+            
+            loader: function(extent, resolution, projection) {
+              var epsg4326Extent =
+                  ol.proj.transformExtent(extent, projection, 'EPSG:4326');
+              
+              var z = map.getView().getZoom();
+	   		   if(z < 5){
+				   z = 1;
+			   }else if(z < 8){
+				   z = 2;
+			   }else {
+				   z = 3;
+			   }
+    		   var data = null;
+    		   var u2 = XF.SERVER + '/dibiao/request?level='+ z + '&bbox=' + epsg4326Extent.join();
+    		   g_zlevel = z;
+    		   $.ajax({
+    			   url: u2,
+    			   success: function( result ) {
+    				    data = result;
+               		    var features = new ol.format.GeoJSON().readFeatures(data,{
+                            featureProjection: wgs84
+                        });
+               		    if(features.length > 0){
+               		    	features.forEach(function(item,index){
+               		    		var geom = item.getGeometry();
+               		    		var coords = geom.getCoordinates();
+               		    		coords = ol.proj.transform(coords, 'EPSG:4326','EPSG:3857');
+               		    		geom.setCoordinates(coords);
+               		    	});
+               		    	vectorSource.addFeatures(features);
+               		    }
+    			   }
+    			 });
+            },
+            strategy: function(extent, resolution){
+            	if(old_ext != extent && old_res != resolution){
+            		vectorSource.clear();
+            		old_ext = extent;
+            		old_res = resolution;
+            	}
+            	return [extent];
+            },
+            wrapX:false,
+            useSpatialIndex:false
+          });
+		var vectorlayer =  new ol.layer.Vector({
+        	source:vectorSource,
+        	style:function(f){
+        		var count = f.get('count');
+        		var sty = g_styles[g_zlevel -1];
+        		sty.getText().setText(count+'');
+        		return sty;
+        	}
+        });
+    	function convolve(context) {
+            var canvas = context.canvas;
+            var width = canvas.width;
+            var height = canvas.height;
+            var inputData = context.getImageData(0, 0, width, height).data;
+            
+            var output = context.createImageData(width, height);
+            var pix = output.data;
+            
+            var r,g,b;
+            for (var i = 0, n = pix.length; i < n; i += 4) {
+                r = inputData[i];
+                g = inputData[i+1];
+                b = inputData[i+2];
+
+                var v = 0.299 * r+ 0.587 * g + 0.114 *b;
+                
+                pix[i] = 200 - r;
+                pix[i+1] = 220 - g;
+                pix[i+2] = 255 - b;
+                pix[i+3] = 255;
+                
+            }
+            context.putImageData(output, 0, 0);
+        }
+        
+        /*var baselayer = new ol.layer.Tile({
+            source: new ol.source.XYZ({   
+                minZoom:1,
+                maxZoom:14,
+                url:'http://127.0.0.1:15000/data/google/roadmap/{z}/{x}/{y}.png'
+            })
+          });*/
+          /*var googleMapLayer = new ol.layer.Tile({  
+              source: new ol.source.XYZ({  
+                  url: 'http://www.google.cn/maps/vt/pb=!1m4!1m3!1i{z}!2i{x}!3i{y}!2m3!1e0!2sm!3i380072576!3m8!2szh-CN!3scn!5e1105!12m4!1e68!2m2!1sset!2sRoadmap!4e0!5m1!1e0'  
+              })  
+          }); */ 
+        var baselayer = new ol.layer.Tile({
+            source: new ol.source.OSM()
+          });
+          baselayer.on('postcompose', function(event) {
+            convolve(event.context);
+          });
+          
+        
+        var map = new ol.Map({
+            layers: [
+            	baselayer,
+            	vectorlayer
+            ],
+        target: 'map',
+        view: new ol.View({
+        	/*projection:'EPSG:4326',*/
+            center: [0, 0],
+            zoom: 3
+            })
+        });   
+                        
+    </script>
+</body>
+</html>
