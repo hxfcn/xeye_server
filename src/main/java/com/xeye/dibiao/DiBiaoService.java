@@ -6,18 +6,18 @@ import java.io.InputStreamReader;
 import java.io.UnsupportedEncodingException;
 import java.net.HttpURLConnection;
 import java.net.URL;
+import java.util.Iterator;
 import java.util.List;
+import java.util.Map;
 
 import javax.annotation.Resource;
 
-//import org.json.JSONException;
-//import org.json.JSONObject;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Component;
 import org.springframework.stereotype.Service;
-//import com.alibaba.fastjson.JSONObject;
 
 import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
@@ -31,7 +31,7 @@ public class DiBiaoService {
     
     public String query(float l,float b,float r,float t,int level) {
     	
-    	String sql = "SELECT * FROM dibiao_tongji WHERE lon > ? AND lon < ? AND lat > ? AND lat < ? AND type = ?";
+    	String sql = "SELECT * FROM cityip WHERE lon > ? AND lon < ? AND lat > ? AND lat < ? AND type = ?";
     	List<CityDiBiaoInfo> items = myJdbcTemplate.query(sql, new CityDiBiaoMapper(),l,r,b,t,level);
     	
     	System.out.println(String.format("SELECT * FROM dibiao_tongji WHERE lon > %f AND lon < %f AND lat > %f AND lat < %f AND type = %d\n",
@@ -64,9 +64,66 @@ public class DiBiaoService {
     	geojson.put("features", features);
     	return geojson.toJSONString();
     }
+    public String queryIPDuan(String id) {
+    	String sql = "SELECT cityip_merge.IP_Start,cityip_merge.IP_End FROM cityip_merge,cityip WHERE cityip.id = ' " + id +
+    			"' AND cityip_merge.country = cityip.country AND cityip_merge.province = cityip.province AND cityip_merge.city = cityip.city LIMIT 20";
+    	
+    	/*String sql = "SELECT * FROM cityip_merge2";*/
+    	List<Map<String, Object>> rows = myJdbcTemplate.queryForList(sql);
+    	Iterator it = rows.iterator();
+    	
+    	JSONArray arr = new JSONArray();
+    	
+		 while(it.hasNext()) {
+			 Map<String, Object> r = (Map<String, Object>)it.next();
+			 String ip0 = (String)r.get("IP_Start");
+			 String ip1 = (String)r.get("IP_End");
+			 if(ip0 != null && ip1 != null) {
+				 arr.add(ip0);
+				 arr.add(ip1);
+			 }
+
+		 }
+		 return arr.toJSONString();
+    }
+    public String queryStreet(float l,float b,float r,float t) {
+    	String sql = "SELECT * FROM streetip WHERE Longitude > ? AND Longitude < ? AND Latitude > ? AND Latitude < ? limit 500";
+    	List<StreetDiBiaoInfo> items = myJdbcTemplate.query(sql, new StreetDiBiaoMapper(),l,r,b,t);
+    	
+    	JSONArray features = new JSONArray();
+    	for(StreetDiBiaoInfo item : items){
+    		JSONArray coordinates = new JSONArray();
+    		coordinates.add(item.getLongitude());
+    		coordinates.add(item.getLatitude());
+    		
+    		JSONObject geometry = new JSONObject();
+    		geometry.put("type", "Point");
+    		geometry.put("coordinates", coordinates);
+    		
+    		JSONObject properties = new JSONObject();
+    		properties.put("IP", item.getIP());
+    		properties.put("Address", item.getAddress());
+    		properties.put("Organization", item.getOrganization());
+    		properties.put("ServerName", item.getServerName());
+    		
+    		JSONObject feature = new JSONObject();
+    		feature.put("type", "Feature");
+    		feature.put("properties", properties);
+    		feature.put("geometry", geometry);
+    		
+    		features.add(feature);
+    	}
+    	
+    	
+    	JSONObject geojson = new JSONObject();
+    	geojson.put("type", "FeatureCollection");
+    	geojson.put("features", features);
+    	return geojson.toJSONString();
+    	
+    }
     
     public void fill() {
-    	String sql = "select * from dibiao_tongji where lon is null or lat is null";
+    	String sql = "select * from cityip where lon is null or lat is null";
     	List<CityDiBiaoInfo> items = myJdbcTemplate.query(sql, new CityDiBiaoMapper());
     	
     	for(CityDiBiaoInfo item : items){
@@ -89,7 +146,7 @@ public class DiBiaoService {
     public static final String GET_URL = "http://maps.google.cn/maps/api/geocode/json?address=";  
    
     private int updateCityDiBiaoInfo(CityDiBiaoInfo item) {
-    	String sql = "update dibiao_tongji set lon = ?,lat= ? where id = ?";
+    	String sql = "update cityip set lon = ?,lat= ? where id = ?";
     	int r = myJdbcTemplate.update(sql,item.getLon(),item.getLat(),item.getId());
     	System.out.println(item.toString()); 
     	return r;
