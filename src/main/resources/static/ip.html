@@ -2,168 +2,147 @@
 <html>
 
 <head>
-    <title>openlayers flashmarker</title>
+    <title>IP Location</title>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0, user-scalable=no">
     <link rel="stylesheet" href="./css/openlayers/style.css" type="text/css">
+    <link rel="stylesheet" href="./css/templatemo_style.css" type="text/css">
+    
     <script type="text/javascript" src="./js/OpenLayers.js"></script>
     <script type="text/javascript" src="./js/openlayers-line.js"></script>
-    <style>
-        html,
-        body {
-            background-image:url('ImageResources/mainPage/background.png');
-            background-size:100vw 100vh;
-            /*background-size:100%;*/
-            background-repeat: no-repeat;
-
-            width: 100%;
-            height: 100%;
-            margin: 0;
-            padding: 0;
-            overflow: hidden;
-        }
-
-        .frameImage {
-            background-image:url('ImageResources/mainPage/frames.png');
-            /*background-size: 100% auto;*/
-            background-repeat: no-repeat;
-            width:100%;
-            height: 91%;
-            background-size: 100vw 91vh;
-            position: absolute;
-            left:0vh;
-            top: 9vh;
-            margin: 0px;
-            z-index: 10;
-            pointer-events: none;
-
-        }
-        * {
-            box-sizing: border-box;
-        }
-        .menuButton  {
-            /*display: inline-block;*/
-            background-image: url(ImageResources/mainPage/buttonUnselect.png);
-            background-size:  100% ;
-            background-position: top;
-            background-repeat: no-repeat;
-            /*border: 1px solid red;*/
-            margin: 0.75vh 0px 0px 0px;
-            padding: 2.8vh 0vh 1.55vh 0vh ;
-            width: 11.4%;
-            float: left;
-            text-align: center;
-            color: white;
-            border:0px;
-            cursor: pointer;
-            background-color: transparent;
-            font-size: 1.1vw;
-            outline:none;
-        }
-        .menuButtonActive{
-            background-image: url(ImageResources/mainPage/buttonSelected.png);
-            background-size:  100% ;
-            background-position: top;
-            background-repeat: no-repeat;
-            /*border: 1px solid red;*/
-            margin: 0.75vh 0px 0px 0px;
-            padding: 2.8vh 0vh 1.55vh 0vh ;
-            width: 11.4%;
-            float: left;
-            text-align: center;
-            color: white;
-            border:0px;
-            cursor: pointer;
-            background-color: transparent;
-            font-size: 1.1vw;
-            outline:none;
-        }
-        a.active {
-            background-image: url(ImageResources/mainPage/buttonSelected.png);
-        }
-        a:hover{
-            background-image: url(ImageResources/mainPage/buttonSelected.png);
-            color: black;
-        }
-        .titleButton {
-            background-image: url(ImageResources/mainPage/title.png);
-            background-size:  100% 100%;
-            background-position: right bottom, left top;
-            background-repeat: no-repeat;
-            /*border: 1px solid red;*/
-            padding: 5.2vh 0vh 6vh 0vh ;
-            width: 24.7%;
-            float: left;
-            text-align: center;
-            color: white;
-            font-size: 1.5vw;
-            z-index: 1000;
-            position:relative ;
-        }
-        .blank-border {
-            /*border: 1px solid red;*/
-            padding: 1% 0.3%;
-            width:1.5%;
-            float: left;
-        }
-        .blank {
-            /*border: 1px solid red;*/
-            padding: 1% 0%;
-            width:0.65%;
-            float: left;
-        }
-        .row:after {
-            content: "";
-            clear: both;
-            display: block;
-
-        }
-        .menuRow {
-            z-index:999;
-            height:9%;
-        }
-        .frameRow {
-            /*z-index:0;*/
-            height: 91%;
-        }
-
-        #map {
-            width:100%;
-            height: 91%;
-            position: absolute;
-            left:0vh;
-            top: 9vh;
-            opacity: 0.7;
-            z-index: 1;
-        }
-    </style>
+    
 </head>
 
 <body>
 
-    <div class="menuRow">
-    <!--<div class="row">-->
-        <div class="blank-border"></div>
-        <a class="menuButtonActive" >IP定位</a>
-        <div class="blank"></div>
-        <a class="menuButton" >地标数据</a>
-        <div class="blank"></div>
-        <a class="menuButton" >拓扑探测</a>
-        <div class="blank"></div>
-        <div class="titleButton" >网络地理综合态势显示</div>
-        <div class="blank"></div>
-        <a class="menuButton" >微信定位</a>
-        <div class="blank"></div>
-        <a class="menuButton" >微博定位</a>
-        <div class="blank"></div>
-        <a class="menuButton" >探测源</a>
-        <div class="blank-border"></div>
-    <!--</div>-->
-</div>
-    <div class="frameRow" name="page">
-        <div class="frameImage"></div>
-        <div id="map"></div>
+   <div class="site-header">
+    <div class="container">
+        <div class="row">
+            <div class="main-menu">
+                <ul>
+                    <div class="blank-border"></div>
+                    <li>
+                        <a id="IP-Location" class="current" href="ip.html">IP定位</a>
+                    </li>
+                    <div class="blank"></div>
+                    <li>
+                        <a id="Landmark" href="dibiao.html">地标数据</a>
+                    </li>
+                    <div class="blank"></div>
+                    <li>
+                        <a>拓扑探测</a>
+                    </li>
+                    <div class="blank"></div>
+                    <li>
+                        <div class="titleButton">网络地理综合态势显示</div>
+                    </li>
+                    <div class="blank"></div>
+                    <li>
+                        <a>微信定位</a>
+                    </li>
+                    <div class="blank"></div>
+                    <li>
+                        <a>微博定位</a>
+                    </li>
+                    <div class="blank"></div>
+                    <li>
+                        <a>探测源</a>
+                    </li>
+                    <div class="blank-border"></div>
+                </ul>
+            </div>
+        </div>
     </div>
+</div>
+<div class="frameRow" name="page">
+    <div class="frameImage"></div>
+    <div id="IP_Location_Page">
+        <div id="searchInput">
+            <input id="IP_input" type="text"  name="IP" placeholder="请输入IP地址">
+            <button id="searchButton"></button>
+        </div>
+        <div id="information">
+            <table id="IP_Information">
+                <tr>
+                    <th>IP地址:</th>
+                    <td>219.85.23.10</td>
+                </tr>
+                <tr>
+                    <th>状态信息:</th>
+                    <td>定位到街道级别</td>
+                </tr>
+                <tr>
+                    <th>状态码:</th>
+                    <td>100</td>
+                </tr>
+                <tr>
+                    <th>定位精度:</th>
+                    <td>街道</td>
+                </tr>
+                <tr>
+                    <th>定位方式:</th>
+                    <td>地面采集</td>
+                </tr>
+                <tr>
+                    <th>应用场景:</th>
+                    <td>住宅用户</td>
+                </tr>
+                <tr>
+                    <th>用时:</th>
+                    <td>0ms</td>
+                </tr>
+                <tr>
+                    <th>AS号:</th>
+                    <td>181182</td>
+                </tr>
+                <tr>
+                    <th>准确度:</th>
+                    <td>0000</td>
+                </tr>
+                <tr>
+                    <th>一致性:</th>
+                    <td>0000</td>
+                </tr>
+            </table>
+            <table id="IP_GEO_Information">
+                <tr>
+                    <th>省份:</th>
+                    <td>中国台湾</td>
+                </tr>
+                <tr>
+                    <th>城市:</th>
+                    <td>台南市</td>
+                </tr>
+                <tr>
+                    <th>区县:</th>
+                    <td>中西区</td>
+                </tr>
+                <tr>
+                    <th>经度:</th>
+                    <td>120.198783</td>
+                </tr>
+                <tr>
+                    <th>纬度:</th>
+                    <td>22.989832</td>
+                </tr>
+                <tr>
+                    <th>半径:</th>
+                    <td>0.8179KM</td>
+                </tr>
+            </table>
+        </div>
+        <div id="detail" style = "display:none">
+            <div id="title">详细信息</div>
+            <div id="IP_range_name">IP段</div>
+            <div id="IP_range">127.127.1.0</div>
+            <div id="ASN_name">ASN</div>
+            <div id="ASN">7</div>
+            <div id="isp_name">isp</div>
+            <div id="isp">chakdjlafklasfd</div>
+        </div>
+    </div>
+    <div id="map"></div>
+</div>
 
 
     <script type="text/javascript">
@@ -231,10 +210,10 @@
                 //要显示的点
                 //经纬度、类型(起点、中间点、终点)、所属路径
                 points:[
-                    {lonlat:['113.270793', '23.135308'],type:1,path:1},
-                    {lonlat:['119.612787', '29.317599'],type:1,path:1},
-                    {lonlat:['116.413554', '39.911013'],type:1,path:1},
-                    {lonlat:['109.518646', '18.258217'],type:1,path:1},
+                    {lonlat:['113.270793', '23.135308'],type:0,path:1},
+                    {lonlat:['119.612787', '29.317599'],type:-1,path:1},
+                    {lonlat:['116.413554', '39.911013'],type:-1,path:1},
+                    {lonlat:['109.518646', '18.258217'],type:-1,path:1},
                     {lonlat:['113.603757', '24.816174'],type:1,path:1},
                     
                 ],

@@ -102,16 +102,17 @@ var MoveLine = function MoveLine(map, userOptions) {
     function Marker(opts) {
         this.city = opts.name;
         this.lonlat = opts.lonlat;
-        this.speed = opts.speed || 0.15;
+        this.speed = opts.speed || 0.1;
         this.radius = 0;
         this.max = opts.max || 20;
+        this.color = opts.color || defaultOpts.strokeStyle;
     }
 
     Marker.prototype.draw = function (context) {
         context.save();
         context.beginPath();
         var pixel = map.getPixelFromLonLat(this.lonlat);
-        context.strokeStyle = defaultOpts.strokeStyle;
+        context.strokeStyle = this.color;
         context.moveTo(pixel.x + this.radius, pixel.y);
         context.arc(pixel.x, pixel.y, this.radius, 0, Math.PI * 2);
         context.stroke();
@@ -259,10 +260,17 @@ var MoveLine = function MoveLine(map, userOptions) {
             var dataset = defaultOpts.points;
             dataset.forEach(function (point, i) {
                 var marker = point.lonlat;
+                var color = defaultOpts.strokeStyle;
+                var size = 10;
+                if(point.type == 1){
+                	size = 15;
+                	color = '#4ff';
+                }
                 self.markers.push(new Marker({
                     lonlat: new OpenLayers.LonLat(marker[0], marker[1]).transform(new OpenLayers.Projection("EPSG:4326"), map.getProjectionObject()),
                     //city: marker[2],
-                    max: Math.floor(Math.random() * 10 + 10)
+                    max: size,
+                    color:color
                 }));
             });
         }

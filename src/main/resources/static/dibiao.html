@@ -9,6 +9,8 @@
     <script type="text/javascript" src="./js/openlayers-line.js"></script>-->
     
     <link rel="stylesheet" href="./css/openlayers/ol.css" type="text/css">
+    <link rel="stylesheet" href="./css/templatemo_style.css" type="text/css">
+    
      <script type="text/javascript" src="./js/ol-debug.js"></script>
     <!--<script type="text/javascript" src="./js/ol.js"></script> -->
     <script type="text/javascript" src="./js/jquery.js"></script>
@@ -31,14 +33,75 @@
 </head>
 
 <body>
-    <div id="map"></div>
+
+<div class="site-header">
+    <div class="container">
+        <div class="row">
+            <div class="main-menu">
+                <ul>
+                    <div class="blank-border"></div>
+                    <li>
+                        <a id="IP-Location"  href="ip.html">IP定位</a>
+                    </li>
+                    <div class="blank"></div>
+                    <li>
+                        <a id="Landmark" class="current" href="dibiao.html">地标数据</a>
+                    </li>
+                    <div class="blank"></div>
+                    <li>
+                        <a>拓扑探测</a>
+                    </li>
+                    <div class="blank"></div>
+                    <li>
+                        <div class="titleButton">网络地理综合态势显示</div>
+                    </li>
+                    <div class="blank"></div>
+                    <li>
+                        <a>微信定位</a>
+                    </li>
+                    <div class="blank"></div>
+                    <li>
+                        <a>微博定位</a>
+                    </li>
+                    <div class="blank"></div>
+                    <li>
+                        <a>探测源</a>
+                    </li>
+                    <div class="blank-border"></div>
+                </ul>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="frameRow" name="page">
+
+    <div class="frameImage"></div>
+    <div id="IP_Location_Page">
+  
+            
+        <div id="detail" style = "display:none">
+            <div id="title">详细信息</div>
+            <div id="IP_range_name">IP段</div>
+            <div id="IP_range">127.127.1.0</div>
+            <div id="ASN_name">ASN</div>
+            <div id="ASN">7</div>
+            <div id="isp_name">isp</div>
+            <div id="isp">chakdjlafklasfd</div>
+        </div>
+    </div>
+    
+
+   <div id="map"></div>
+</div>
+
     <script type="text/javascript">
     
     var g_styles = [];
     for(var i = 1; i < 5; i++){
     	var ci = new ol.style.Style({
             image: new ol.style.Icon({
-            	src:'ImageResources/dibiao/' + i + '.png',
+            	src:'ImageResources/Landmark/' + i + '.png',
             	scale:1.0
             }),
             text:new ol.style.Text({
