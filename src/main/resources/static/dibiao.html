@@ -14,7 +14,6 @@
      <script type="text/javascript" src="./js/ol-debug.js"></script>
     <!--<script type="text/javascript" src="./js/ol.js"></script> -->
     <script type="text/javascript" src="./js/jquery.js"></script>
-    <script type="text/javascript" src="./js/common.js"></script>
     <style>
         html,
         body {
@@ -137,7 +136,7 @@
 		   z = 4;
 		}
 		var data = null;
-		   var u2 = XF.SERVER + '/dibiao/request?level='+ z + '&bbox=' + epsg4326Extent.join();
+		   var u2 = 'dibiao/request?level='+ z + '&bbox=' + epsg4326Extent.join();
 		   g_level = z;
 		   $.ajax({
 			   url: u2,
