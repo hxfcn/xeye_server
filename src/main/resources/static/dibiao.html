@@ -28,6 +28,7 @@
             width: 100%;
             height: 100%;
         }
+
     </style>
 </head>
 
@@ -78,19 +79,65 @@
     <div class="frameImage"></div>
     <div id="IP_Location_Page">
   
-            
-        <div id="detail" style = "display:none">
-            <div id="title">详细信息</div>
-            <div id="IP_range_name">IP段</div>
-            <div id="IP_range">127.127.1.0</div>
-            <div id="ASN_name">ASN</div>
-            <div id="ASN">7</div>
-            <div id="isp_name">isp</div>
-            <div id="isp">chakdjlafklasfd</div>
-        </div>
+		<div id='city_ipinfo' class="mywidget">
+			<div class="head">IP段信息</div>
+			<div class="body">
+				<table class="mytable" style="width:250px">
+					<tr><td></td></tr>
+					<tr><td></td></tr>
+					<tr><td></td></tr>
+					<tr><td></td></tr>
+					<tr><td></td></tr>
+					<tr><td></td></tr>
+					<tr><td></td></tr>
+					<tr><td></td></tr>
+					<tr><td></td></tr>
+				</table>
+			</div>
+			<div class="buttom">
+				<img src="./ImageResources/table/back.png" style="height:20px" id="back"/>
+				<img src="./ImageResources/table/front.png" style="padding-left:50px;height:20px" id="front"/>
+			</div>
+		</div>
+		
+		<div id='Street' class="mywidget">
+			<div class="head">详细信息</div>
+			<div class="body">
+				<table class="mytable" style="width:300px">
+                <tr>
+                    <td style="width:100px">IP地址</td>
+                    <td id="street_ip"></td>
+                </tr>
+                <tr>
+                    <td>机构名</td>
+                    <td id="street_Organization"></td>
+                </tr>
+                <tr>
+                    <td>域名</td>
+                    <td id="street_ServerName"></td>
+                </tr>
+                <tr>
+                    <td>经度</td>
+                    <td id="street_lon"></td>
+                </tr>
+                <tr>
+                    <td>纬度</td>
+                    <td id="street_lat"></td>
+                </tr>
+                <tr>
+                    <td>详细地址</td>
+                    <td id="street_Address"></td>
+                </tr>
+                <tr>
+                    <td>置信度</td>
+                    <td id="street_Reliability"></td>
+                </tr>
+				</table>
+			</div>
+			<div class="buttom">
+			</div>
+		</div>
     </div>
-    
-
    <div id="map"></div>
 </div>
 
@@ -213,7 +260,51 @@
            }
            context.putImageData(output, 0, 0);
        }
+    function showStreet(f,pix){
+    	$("#street_ip").text(f.get("IP"));
+    	$("#street_Organization").text(f.get("Organization"));
+    	$("#street_ServerName").text(f.get("ServerName"));
+    	$("#street_Address").text(f.get("Address"));
+    	
+ 		var geom = f.getGeometry();
+ 		var coords = geom.getCoordinates();
+ 		coords = ol.proj.transform(coords, epsg3857,epsg4326);
+ 		$("#street_lon").text(coords[0] + '');
+ 		$("#street_lat").text(coords[1] + '');
+        $("#Street").css("left",pix[0]+1);
+        $("#Street").css("top",pix[1] + 40);
+        $("#Street").fadeIn("slow");
+    }
+    function showCityIP(f,pix){
+        var id= f.get("id");
+        if(id == undefined){
+        	return;
+        }
+        $("#city_ipinfo").css("left",pix[0]+1);
+        $("#city_ipinfo").css("top",pix[1] + 40);
+        $("#city_ipinfo").fadeIn("slow");
         
+        var tds = $("#city_ipinfo td");
+        tds.text("");
+	   	$.ajax({
+		   	url: "dibiao/cityip?id=" + id,
+	   		success:function(data){
+	   			var obj = JSON.parse(data);
+	   			
+	   			if(obj.length < 1){
+	   				$(tds[0]).text("无数据");
+	   				return;
+	   			}
+	   			
+	   			var i = 0;
+	   			var index = 0;
+	   			for(;i < obj.length;i+=2){
+	   				$(tds[index++]).text(obj[i]+ ' -> ' + obj[i+1]);
+	   			}
+	   		}
+		});
+    }
+    
         /*var baselayer = new ol.layer.Tile({
             source: new ol.source.XYZ({   
                 minZoom:1,
@@ -245,7 +336,18 @@
             zoom: 3
             })
         });   
-                        
+        map.on('singleclick', function(e) {
+        	$("#Street").hide();
+        	$("#city_ipinfo").hide();
+        	 map.forEachFeatureAtPixel(e.pixel, function(f,layer) {
+        		 if(g_level == 4){
+        			 showStreet(f,e.pixel);
+        		 }else if(g_level == 3){
+        			 showCityIP(f,e.pixel);
+        		 }
+        		 
+               });
+        });
     </script>
 </body>
 </html>

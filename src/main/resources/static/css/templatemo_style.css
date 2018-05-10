@@ -30,10 +30,10 @@ html, body {
     -webkit-font-smoothing: antialiased;
     -moz-osx-font-smoothing: grayscale;
     vertical-align: baseline;
-    /*Ч��ͼ*/
+    /*鏁堟灉鍥�*/
     background: url(../ImageResources/Frame/background.png) bottom;
-    /*IP��λЧ��ͼ*/
-    /*background-image: url(../ImageResources/IP-Location/Ч��ͼ.jpg);*/
+    /*IP瀹氫綅鏁堟灉鍥�*/
+    /*background-image: url(../ImageResources/IP-Location/鏁堟灉鍥�.jpg);*/
     position: relative;
     bottom: 0px;
     background-size: cover;
@@ -135,7 +135,7 @@ h6 {
     float: left;
     text-align: center;
     color: white;
-    font-size: 25px;
+    font-size: 3.5vh;
     line-height: 16vh;
     z-index: 1000;
     position: relative;
@@ -172,7 +172,8 @@ h6 {
     color: white;
     border: 0px;
     cursor: pointer;
-    font-size: 1.1em;
+    /*font-size: 1.1em;*/
+    font-size: 2.5vh;
     outline: none;
 
     text-transform: uppercase;
@@ -197,8 +198,9 @@ h6 {
     color: white;
     border: 0px;
     cursor: pointer;
-    font-size: 18px;
+    /*font-size: 18px;*/
     outline: none;
+    font-size: 2.7vh;
 
     text-transform: uppercase;
     border: 0;
@@ -207,7 +209,8 @@ h6 {
 
 .main-menu ul li a:hover {
     background-size: 101%;
-    font-size: 1.2em;
+    /*font-size: 1.2em;*/
+    font-size: 2.75vh;
 }
 
 /* ==========================================================================
@@ -293,27 +296,29 @@ h6 {
     top: 2.5vh;
     opacity: 1.0;
     z-index: 1;
-    font-size: 1em;
+    /*font-size: 1em;*/
+    font-size: 2.3vh;
     text-align: left;
     /*line-height: 2vh;*/
 }
 
 /*------Information Table------*/
 #information {
-    background-image: url(../ImageResources/IP-Location/textframe.png);
+    background-image: url(../ImageResources/IP-Location/Text_frame.png);
     background-size:  100% 100%;
     background-color: transparent;
     background-repeat: no-repeat;
-    font-size: 0.8em;
+    /*font-size: 0.8em;*/
+    font-size: 1.9vh;
     text-align: left;
     color: white;
     /*width: 16vw;*/
     width: 15.8vw;
-    height: 60vh;
+    height: 52vh;
     /*height: auto;*/
     position: absolute;
     left: 2.6vw;
-    top: 29.5vh;
+    top: 31vh;
     opacity: 1.0;
     z-index: 1;
 }
@@ -339,8 +344,8 @@ h6 {
     /*background-color: #26b864;*/
     position: relative;
     width: 12vw;
-    height: 32.5vh;
-    left: 2.4vw;
+    height: 25vh;
+    left: 2vw;
     top: 2.0vh;
 }
 
@@ -348,223 +353,188 @@ h6 {
     /*background-color:chocolate;*/
     position: relative;
     width: 12vw;
-    height: 19.5vh;
-    left: 2.4vw;
-    top: 5.4vh;
+    height: 20vh;
+    left: 2vw;
+    top: 5vh;
 }
 
 /*------Detail Table------*/
-#IP_Location_Page #detail {
-    background-image: url(../ImageResources/IP-Location/Pop-upbox.png);
-    background-size: 100%;
+/*------Source IP------*/
+#IP_Location_Page #source {
+    background-image: url(../ImageResources/IP-Location/IP_source-1.png);
+    background-size: 100% 100%;
     background-color: transparent;
     background-repeat: no-repeat;
-    font-size: 13px;
-    width: 20vw;
-    height: 30vh;
+    font-size: 2.3vh;
+    text-align: center;
+    color: white;
+    width: 15vw;
+    height: 13vh;
     position: absolute;
-    left: 50vw;
-    top: 29.5vh;
+    left: 20vw;
+    top: 10vh;
     opacity: 0.7;
     z-index: 1;
 }
-
-#IP_Location_Page #detail #title {
-    position: relative;
-    width: 20vw;
-    text-align: center;
-    font-size: 16px;
-    /*height: 30vh;*/
-    /*left: 7.7vw;*/
-    top: 0.5vh;
-    color: white;
-}
-
-#IP_Location_Page #detail #IP_range_name {
-    position: relative;
-    text-align: center;
-    line-height: 3.5vh;
+#IP_Location_Page #source #source_title {
     /*background-color: #26b864;*/
-    width: 4.3vw;
-    height: 3.5vh;
-    left: 1.05vw;
-    top: 2.5vh;
-    color: white;
+    position:relative;
+    line-height: 4vh;
+    /*font-size: ;*/
+    width:5vw;
+    height:4vh;
+    left:5vw;
+    top:0.25vh;
 }
-
-#IP_Location_Page #detail #IP_range {
-    position: relative;
-    text-align: center;
-    line-height: 3.5vh;
+#IP_Location_Page #source #source_IP {
     /*background-color: #26b864;*/
-    width: 13.5vw;
-    height: 3.5vh;
-    left: 5.6vw;
-    top: -1.00vh;
-    color: white;
-}
-
-#IP_Location_Page #detail #ASN_name {
-    position: relative;
-    text-align: center;
+    position:relative;
+    width:13.2vw;
+    height:3.5vh;
     line-height: 3.5vh;
-    /*background-color: #26b864;*/
-    width: 4.3vw;
-    height: 3.5vh;
-    left: 1.05vw;
-    top: -0.5vh;
-    color: white;
+    left:0.9vw;
+    top:2.3vh;
 }
 
-#IP_Location_Page #detail #ASN {
-    position: relative;
-    text-align: center;
-    line-height: 3.5vh;
-    /*background-color: #26b864;*/
-    width: 13.5vw;
-    height: 3.5vh;
-    left: 5.6vw;
-    top: -4.00vh;
-    color: white;
-}
-
-#IP_Location_Page #detail #isp_name {
-    position: relative;
-    text-align: center;
-    line-height: 3.5vh;
-    /*background-color: #26b864;*/
-    width: 4.3vw;
-    height: 3.5vh;
-    left: 1.05vw;
-    top: -3.6vh;
-    color: white;
-}
-
-#IP_Location_Page #detail #isp {
-    position: relative;
-    text-align: center;
-    line-height: 3.5vh;
-    /*background-color: #26b864;*/
-    width: 13.5vw;
-    height: 3.5vh;
-    left: 5.6vw;
-    top: -7.10vh;
-    color: white;
-}
-
-/* ==========================================================================
-    Landmark Styling
-========================================================================== */
-/*------Detail Table------*/
-#Landmark_Page #landmark_detail {
-    background-image: url(../ImageResources/IP-Location/Pop-upbox.png);
-    background-size: 100%;
+/*------Router IP------*/
+#IP_Location_Page #router {
+    background-image: url(../ImageResources/IP-Location/Router-1.png);
+    background-size: 100% 100%;
     background-color: transparent;
     background-repeat: no-repeat;
-    font-size: 13px;
-    width: 20vw;
-    height: 30vh;
+    font-size: 2.3vh;
+    text-align: center;
+    color: white;
+    width: 15vw;
+    height: 13vh;
     position: absolute;
-    left: 50vw;
-    top: 29.5vh;
+    left: 20vw;
+    top: 25vh;
     opacity: 0.7;
     z-index: 1;
 }
+#IP_Location_Page #router #router_title {
+    /*background-color: #26b864;*/
+    position:relative;
+    line-height: 4vh;
+    /*font-size: ;*/
+    width:5vw;
+    height:4vh;
+    left:5vw;
+    top:0.25vh;
+}
+#IP_Location_Page #router #router_IP {
+    /*background-color: #26b864;*/
+    position:relative;
+    width:13.2vw;
+    height:3.5vh;
+    line-height: 3.5vh;
+    left:0.9vw;
+    top:2.3vh;
+}
 
-#Landmark_Page #detail #title {
-    position: relative;
+/*------Target IP------*/
+#IP_Location_Page #target {
+    background-image: url(../ImageResources/IP-Location/IP_target-1.png);
+    background-size: 100% 100%;
+    background-color: transparent;
+    background-repeat: no-repeat;
+    font-size: 2.3vh;
+    text-align: center;
+    color: white;
     width: 20vw;
-    text-align: center;
-    font-size: 16px;
-    /*height: 30vh;*/
-    /*left: 7.7vw;*/
-    top: 0.5vh;
-    color: white;
+    height: 28vh;
+    position: absolute;
+    left: 20vw;
+    top: 40vh;
+    opacity: 0.7;
+    z-index: 1;
 }
-
-#Landmark_Page #detail #IP_range_name {
-    position: relative;
-    text-align: center;
-    line-height: 3.5vh;
+#IP_Location_Page #target #target_title {
     /*background-color: #26b864;*/
-    width: 4.3vw;
-    height: 3.5vh;
-    left: 1.05vw;
-    top: 2.5vh;
-    color: white;
+    position:relative;
+    line-height: 4vh;
+    /*font-size: ;*/
+    width:8vw;
+    height:4vh;
+    left:6vw;
+    top:0.2vh;
 }
 
-#Landmark_Page #detail #IP_range {
-    position: relative;
-    text-align: center;
-    line-height: 3.5vh;
+#IP_Location_Page #target tr {
     /*background-color: #26b864;*/
-    width: 13.5vw;
-    height: 3.5vh;
-    left: 5.6vw;
-    top: -1.00vh;
-    color: white;
-}
-
-#Landmark_Page #detail #ASN_name {
     position: relative;
-    text-align: center;
-    line-height: 3.5vh;
-    /*background-color: #26b864;*/
-    width: 4.3vw;
-    height: 3.5vh;
-    left: 1.05vw;
-    top: -0.5vh;
-    color: white;
+    width: 18vw;
+    /*height: 10%;*/
 }
 
-#Landmark_Page #detail #ASN {
+#IP_Location_Page #target tr th {
+    width: 4vw;
+    height:auto;
+    /*height:2.8vh;*/
+}
+
+#IP_Location_Page #target tr td {
+    width: 13.7vw;
+    /*height:2.8vh;*/
+}
+#Target_Information{
     position: relative;
-    text-align: center;
-    line-height: 3.5vh;
-    /*background-color: #26b864;*/
-    width: 13.5vw;
-    height: 3.5vh;
-    left: 5.6vw;
-    top: -4.00vh;
-    color: white;
+    /*width: 12vw;*/
+    height: 20vh;
+    left: 0.9vw;
+    top: 1.5vh;
 }
 
-#Landmark_Page #detail #isp_name {
-    position: relative;
-    text-align: center;
-    line-height: 3.5vh;
-    /*background-color: #26b864;*/
-    width: 4.3vw;
-    height: 3.5vh;
-    left: 1.05vw;
-    top: -3.6vh;
-    color: white;
+/*MY TABLE*/
+.mytable{
+	width:400px;
+	border-style: solid;
+	border-width: 5px;
+	border-color: transparent;
 }
-
-#Landmark_Page #detail #isp {
-    position: relative;
-    text-align: center;
-    line-height: 3.5vh;
-    /*background-color: #26b864;*/
-    width: 13.5vw;
-    height: 3.5vh;
-    left: 5.6vw;
-    top: -7.10vh;
-    color: white;
+.mytable td{
+	border-color: transparent;
+	border-width: 5px;
+	background-color: #148fed;
+	height:20px
 }
-
+.mywidget{
+	width: fit-content;
+	position: absolute;
+	z-index:1;
+	opacity:1.0;
+	color:white;
+	display:none;
+}
+.mywidget .head{
+	height:50px;
+	background-image: url(../ImageResources/table/head.png);
+	background-size:100% 100%;
+	text-align:center;
+	padding-top:7px
+}
+.mywidget .body{
+	background-image: url(../ImageResources/table/body.png);
+	background-size:100% 100%;
+}
+.mywidget .buttom{
+	height:26px;
+	background-image: url(../ImageResources/table/buttom.png);
+	background-size:100% 100%;
+	text-align:center
+}
 
 /* ==========================================================================
-    ����̽�� Styling
+    鎷撴墤鎺㈡祴 Styling
 ========================================================================== */
 
 /* ==========================================================================
-    ΢�Ŷ�λ Styling
+    寰俊瀹氫綅 Styling
 ========================================================================== */
 
 /* ==========================================================================
-    ̽��Դ Styling
+    鎺㈡祴婧� Styling
 ========================================================================== */
 
 input, textarea {
