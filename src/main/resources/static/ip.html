@@ -159,6 +159,10 @@
         		point.lonlat = [hop.lon,hop.lat];
         		point.path = i;
         		points.push(point);
+        		minx = hop.lon;
+        		maxx = hop.lon;
+        		miny = hop.lat;
+        		maxy = hop.lat;
     		}
     		if(path.length > 1){
     			var hop = path[path.length - 1];
