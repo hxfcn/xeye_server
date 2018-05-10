@@ -28,7 +28,8 @@ OpenLayers.Layer.CanvasLayer = OpenLayers.Class(OpenLayers.Layer, {
     adjustRadio: function adjustRadio() {
         var ctx = this.ctx;
         var backingStore = ctx.backingStorePixelRatio || ctx.webkitBackingStorePixelRatio || ctx.mozBackingStorePixelRatio || ctx.msBackingStorePixelRatio || ctx.oBackingStorePixelRatio || ctx.backingStorePixelRatio || 1;
-        var pixelRatio = (window.devicePixelRatio || 1) / backingStore;
+        //var pixelRatio = (window.devicePixelRatio || 1) / backingStore;
+        var pixelRatio = 1;
         var canvasWidth = ctx.canvas.width;
         var canvasHeight = ctx.canvas.height;
         ctx.canvas.width = canvasWidth * pixelRatio;
@@ -90,6 +91,17 @@ var MoveLine = function MoveLine(map, userOptions) {
         moveLineShadowBlur: 5,
         //移动步长
         moveSteps:500.0,
+        
+        colors:[],
+        
+        getColor:function(path){
+        	var color = this.colors[path];
+        	if(color == undefined){
+        		color = '#'+Math.floor(Math.random()*0xffffff).toString(16);
+        		this.colors[path] = color;
+        	}
+        	return color;
+        }
     };
 
     //参数合并
@@ -106,13 +118,15 @@ var MoveLine = function MoveLine(map, userOptions) {
         this.radius = 0;
         this.max = opts.max || 20;
         this.color = opts.color || defaultOpts.strokeStyle;
+        this.path = opts.path;
     }
 
     Marker.prototype.draw = function (context) {
         context.save();
         context.beginPath();
         var pixel = map.getPixelFromLonLat(this.lonlat);
-        context.strokeStyle = this.color;
+        //context.strokeStyle = this.color;
+        context.strokeStyle = defaultOpts.getColor(this.path);
         context.moveTo(pixel.x + this.radius, pixel.y);
         context.arc(pixel.x, pixel.y, this.radius, 0, Math.PI * 2);
         context.stroke();
@@ -125,6 +139,7 @@ var MoveLine = function MoveLine(map, userOptions) {
         this.from = opts.from;
         this.to = opts.to;
         this.step = 0.0;
+        this.path = opts.path;
     }
 
     MarkLine.prototype.draw = function (context) {
@@ -132,7 +147,8 @@ var MoveLine = function MoveLine(map, userOptions) {
         var toPixel = map.getPixelFromLonLat(this.to);
         context.beginPath();
         context.lineWidth = defaultOpts.lineWidth;
-        context.strokeStyle = defaultOpts.strokeStyle;
+        //context.strokeStyle = defaultOpts.strokeStyle;
+        context.strokeStyle = defaultOpts.getColor(this.path);
         context.moveTo(fromPixel.x, fromPixel.y);
         context.lineTo(toPixel.x, toPixel.y);
         context.stroke();
@@ -219,7 +235,8 @@ var MoveLine = function MoveLine(map, userOptions) {
             dataset.forEach(function (line, i) {
                 self.markLines.push(new MarkLine({
                     from: new OpenLayers.LonLat(line.from[0], line.from[1]).transform(new OpenLayers.Projection("EPSG:4326"), map.getProjectionObject()),
-                    to: new OpenLayers.LonLat(line.to[0], line.to[1]).transform(new OpenLayers.Projection("EPSG:4326"), map.getProjectionObject())
+                    to: new OpenLayers.LonLat(line.to[0], line.to[1]).transform(new OpenLayers.Projection("EPSG:4326"), map.getProjectionObject()),
+                    path:line.path
                 }));
             });
         },
@@ -259,18 +276,20 @@ var MoveLine = function MoveLine(map, userOptions) {
             dataset.forEach(function (point, i) {
                 var marker = point.lonlat;
                 var color = defaultOpts.strokeStyle;
-                var size = 10;
+                var size = 5;
                 if(point.type == 1){
-                	size = 15;
+                	size = 20;
                 	color = '#4ff';
                 }else if(point.type == 0){
+                	 size = 10;
                 	color = '#f0f';
                 }
                 self.markers.push(new Marker({
                     lonlat: new OpenLayers.LonLat(marker[0], marker[1]).transform(new OpenLayers.Projection("EPSG:4326"), map.getProjectionObject()),
                     //city: marker[2],
                     max: size,
-                    color:color
+                    color:color,
+                    path:point.path
                 }));
             });
         }
@@ -283,6 +302,7 @@ var MoveLine = function MoveLine(map, userOptions) {
     	this.lineTool.markLines = [];
     	defaultOpts.lines = [];
     	defaultOpts.points = [];
+    	defaultOpts.colors = [];
     }
     self.addData= function(data){
     	defaultOpts.lines = data.lines;
@@ -290,7 +310,27 @@ var MoveLine = function MoveLine(map, userOptions) {
         this.lineTool.addMarkLine();
         this.lineTool.addMarker();
         this.lineTool.baseCanvasLayer.render();
+        
+        defaultOpts.points.forEach(function (point, i) {
+        	point.xy = new OpenLayers.LonLat(point.lonlat[0], point.lonlat[1]).transform(new OpenLayers.Projection("EPSG:4326"), map.getProjectionObject());
+        });
     }
+    self.pickMarker = function(x,y){
+    	for(var i=0; i < defaultOpts.points.length;i++){
+    		var point = defaultOpts.points[i];
+        	var pixel = map.getPixelFromLonLat(point.xy);
+        	var rx = pixel.x - x;
+        	var ry = pixel.y - y;
+        	if(rx < 0) rx = rx * -1;
+        	if(ry < 0) ry = ry * -1;
+        	
+        	if(rx + ry < 10){
+        		return point;
+        	}
+    	}
+        return null;
+    }
+    
 };
 
 return MoveLine;

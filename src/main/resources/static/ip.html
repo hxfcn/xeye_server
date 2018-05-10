@@ -4,7 +4,6 @@
 <head>
     <title>IP Location</title>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0, user-scalable=no">
     <link rel="stylesheet" href="./css/openlayers/style.css" type="text/css">
     <link rel="stylesheet" href="./css/templatemo_style.css" type="text/css">
     
@@ -61,7 +60,7 @@
             <input id="IP_input" type="text"  name="IP" value="12.217.64.130" placeholder="请输入IP地址">
             <button id="searchButton" onclick='queryinfo()' ></button>
         </div>
-        <div id="information">
+        <div id="information" style="display:none">
             <table id="IP_Information">
                 <tr>
                     <th>目标IP:</th>
@@ -103,37 +102,39 @@
                 </tr>
             </table>
         </div>
-        <div id="detail" style = "display:none">
-            <div id="title">详细信息</div>
-            <div id="IP_range_name">IP段</div>
-            <div id="IP_range">127.127.1.0</div>
-            <div id="ASN_name">ASN</div>
-            <div id="ASN">7</div>
-            <div id="isp_name">isp</div>
-            <div id="isp">chakdjlafklasfd</div>
-        </div>
     </div>
     <div id="map"></div>
+   	<div id='simple_ipinfo' class="mywidget">
+		<div class="head">信息</div>
+		<div class="body">
+			<table id = "simple_ip_table" class="mytable" style="width:300px">
+                <tr>
+                    <td style="width:100px">IP地址:</td>
+                    <td id="simple_ipinfo_ip"></td>
+                </tr>
+			</table>
+			<table id = "target_ip_table" class="mytable" style="width:300px;display:none">
+                <tr>
+                    <td style="width:100px">IP地址:</td><td id="target_ip_ip"></td>
+                </tr>
+                <tr>
+                    <td>国家:</td><td id="target_ip_country"></td>
+                </tr>
+                <tr>
+                    <td>城市:</td><td id="target_ip_city"></td>
+                </tr>
+                <tr>
+                    <td>经度:</td><td id="target_ip_lon"></td>
+                </tr>
+                <tr>
+                    <td>维度:</td><td id="target_ip_lat"></td>
+                </tr>
+			</table>
+		</div>
+		<div class="buttom"></div>
+	</div>
 </div>
-
-
     <script type="text/javascript">
-    
-    
-    function setExtent(minx,miny,maxx,maxy){
-    	var dx = (maxx - minx)/2;
-    	var dy = (maxy - miny);
-    	dy = dy > dx?dy:dx;
-    	var zlevel = 180 / dy;
-    	var z = 1;
-    	while(zlevel > 1){
-    		zlevel /= 2;
-    		++z;
-    	}
-    	
-    	map.getView().setCenter([(parseFloat(maxx) +parseFloat(minx))/2, (parseFloat(maxy) + parseFloat(miny))/2]);
-    	map.getView().setZoom(z + 1);
-    }
     function querypath(ip){
 	   	$.ajax({
 		   	url: "ip/router?ip=" + ip,
@@ -158,6 +159,7 @@
         		point.type = 0;
         		point.lonlat = [hop.lon,hop.lat];
         		point.path = i;
+        		point.ip = hop.ip;
         		points.push(point);
         		minx = hop.lon;
         		maxx = hop.lon;
@@ -170,6 +172,7 @@
         		point.type = 1;
         		point.lonlat = [hop.lon,hop.lat];
         		point.path = i;
+        		point.ip = hop.ip;
         		points.push(point);
     		}
         	for(var j=1;j < path.length - 1;j++){
@@ -178,6 +181,7 @@
         		point.type = -1;
         		point.lonlat = [hop.lon,hop.lat];
         		point.path = i;
+        		point.ip = hop.ip;
         		points.push(point);
         	}
         	if(path.length > 1){
@@ -218,9 +222,9 @@
                 //线条颜色
                 strokeStyle: '#FFFF78',
                 //移动点半径
-                moveLineWidth:5,
+                moveLineWidth:3,
                 //移动点颜色
-                moveLineColor:'#FFFF78',
+                moveLineColor:'#FFFFFF',
                 //移动点阴影颜色
                 moveLineShadowColor: '#FFFFFF',
                 //移动点阴影大小
@@ -250,6 +254,7 @@
     	//map.zoomTo(map.getZoomForExtent(bbox));
     	map.zoomToExtent(bbox);
     }
+    var g_query_ip = null;
     function queryinfo(){
     	//var input = $("#IP_input");
     	var inuu= document.getElementById('IP_input');
@@ -257,11 +262,12 @@
     	$("#information").hide();
     	$("#information td").text("");
     	querypath(ip);
+    	g_query_ip = null;
 	   	$.ajax({
 		   	url: "ip/info?ip=" + ip,
 	   		success:function(data){
 	   			var obj = JSON.parse(data);
-	   			
+	   			g_query_ip = obj;
 	   			$("#target_ip").text(obj.ip);
 	   			$("#geo_level").text(obj.geo_level);
 	   			$("#method").text(obj.method);
@@ -334,13 +340,44 @@
                 map.getProjectionObject()
             ), 5);
             
-
+            map.events.register("click", map, onMapClick);
+            
         }
 
         if (document.all) {
             window.attachEvent('onload', init);
         } else {
             window.addEventListener('load', init, false);
+        }
+        
+        function onMapClick(e){
+        	$("#simple_ipinfo").hide();
+        	if(moveline != null){
+        		var marker = moveline.pickMarker(e.xy.x,e.xy.y);
+        		if(marker == null) return;
+        		var headtitle = "路由IP";
+        		if(marker.type == 1 && g_query_ip != null){
+        			$("#target_ip_table").attr("style","width:300px");
+        			$("#simple_ip_table").attr("style","display:none");
+    	   			$("#target_ip_ip").text(g_query_ip.ip);
+    	   			$("#target_ip_country").text(g_query_ip.country_name);
+    	   			$("#target_ip_city").text(g_query_ip.city_name);
+    	   			$("#target_ip_lon").text(marker.lonlat[0] + '');
+    	   			$("#target_ip_lat").text(marker.lonlat[1] + '');
+    	   			headtitle = "目标IP信息"
+        		}else{
+        			$("#target_ip_table").attr("style","display:none");
+        			$("#simple_ip_table").attr("style","width:300px");
+        			$("#simple_ipinfo_ip").text(marker.ip);
+        		}
+        		if(marker.type == 0){
+        			headtitle = "源IP";
+        		}
+        		$("#simple_ipinfo .head").text(headtitle);
+                $("#simple_ipinfo").css("left",e.xy.x+1);
+                $("#simple_ipinfo").css("top",e.xy.y + 40);
+        		$("#simple_ipinfo").fadeIn();
+        	}
         }
     </script>
 </body>
