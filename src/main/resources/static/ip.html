@@ -10,7 +10,7 @@
     
     <script type="text/javascript" src="./js/OpenLayers.js"></script>
     <script type="text/javascript" src="./js/openlayers-line.js"></script>
-    
+    <script type="text/javascript" src="./js/jquery.js"></script>
 </head>
 
 <body>
@@ -58,64 +58,40 @@
     <div class="frameImage"></div>
     <div id="IP_Location_Page">
         <div id="searchInput">
-            <input id="IP_input" type="text"  name="IP" placeholder="请输入IP地址">
-            <button id="searchButton"></button>
+            <input id="IP_input" type="text"  name="IP" value="12.217.64.130" placeholder="请输入IP地址">
+            <button id="searchButton" onclick='queryinfo()' ></button>
         </div>
         <div id="information">
             <table id="IP_Information">
                 <tr>
-                    <th>IP地址:</th>
-                    <td>219.85.23.10</td>
+                    <th>目标IP:</th>
+                    <td id="target_ip">219.85.23.10</td>
                 </tr>
                 <tr>
-                    <th>状态信息:</th>
-                    <td>定位到街道级别</td>
+                    <th>定位级别:</th>
+                    <td id="geo_level">定位到街道级别</td>
                 </tr>
                 <tr>
-                    <th>状态码:</th>
-                    <td>100</td>
-                </tr>
-                <tr>
-                    <th>定位精度:</th>
-                    <td>街道</td>
-                </tr>
-                <tr>
-                    <th>定位方式:</th>
-                    <td>地面采集</td>
-                </tr>
-                <tr>
-                    <th>应用场景:</th>
-                    <td>住宅用户</td>
-                </tr>
-                <tr>
-                    <th>用时:</th>
-                    <td>0ms</td>
+                    <th>定位方法:</th>
+                    <td id="method">100</td>
                 </tr>
                 <tr>
                     <th>AS号:</th>
-                    <td>181182</td>
+                    <td id="ASN">181182</td>
                 </tr>
                 <tr>
-                    <th>准确度:</th>
-                    <td>0000</td>
-                </tr>
-                <tr>
-                    <th>一致性:</th>
-                    <td>0000</td>
+                    <th>ISP:</th>
+                    <td id="ISP">地面采集</td>
                 </tr>
             </table>
             <table id="IP_GEO_Information">
                 <tr>
-                    <th>省份:</th>
-                    <td>中国台湾</td>
+                    <th>国家:</th>
+                    <td id="country_name">中国</td>
                 </tr>
                 <tr>
                     <th>城市:</th>
-                    <td>台南市</td>
-                </tr>
-                <tr>
-                    <th>区县:</th>
-                    <td>中西区</td>
+                    <td id="city_name">台南市</td>
                 </tr>
                 <tr>
                     <th>经度:</th>
@@ -124,10 +100,6 @@
                 <tr>
                     <th>纬度:</th>
                     <td>22.989832</td>
-                </tr>
-                <tr>
-                    <th>半径:</th>
-                    <td>0.8179KM</td>
                 </tr>
             </table>
         </div>
@@ -146,6 +118,158 @@
 
 
     <script type="text/javascript">
+    
+    
+    function setExtent(minx,miny,maxx,maxy){
+    	var dx = (maxx - minx)/2;
+    	var dy = (maxy - miny);
+    	dy = dy > dx?dy:dx;
+    	var zlevel = 180 / dy;
+    	var z = 1;
+    	while(zlevel > 1){
+    		zlevel /= 2;
+    		++z;
+    	}
+    	
+    	map.getView().setCenter([(parseFloat(maxx) +parseFloat(minx))/2, (parseFloat(maxy) + parseFloat(miny))/2]);
+    	map.getView().setZoom(z + 1);
+    }
+    function querypath(ip){
+	   	$.ajax({
+		   	url: "ip/router?ip=" + ip,
+	   		success:function(data){
+	   			var obj = JSON.parse(data);
+	   			querypathcallback(obj);
+	   		}
+		});
+    }
+    
+    var moveline = null;
+    function querypathcallback(paths){
+    	
+    	var minx = 0,miny = 0,maxx = 0,maxy = 0;
+    	var points = [];
+    	var lines = [];
+    	for(var i=0;i < paths.length;i++){
+    		var path = paths[i];
+    		if(path.length > 0){
+    			var hop = path[0];
+        		var point = {};
+        		point.type = 0;
+        		point.lonlat = [hop.lon,hop.lat];
+        		point.path = i;
+        		points.push(point);
+    		}
+    		if(path.length > 1){
+    			var hop = path[path.length - 1];
+        		var point = {};
+        		point.type = 1;
+        		point.lonlat = [hop.lon,hop.lat];
+        		point.path = i;
+        		points.push(point);
+    		}
+        	for(var j=1;j < path.length - 1;j++){
+        		var hop = path[j];
+        		var point = {};
+        		point.type = -1;
+        		point.lonlat = [hop.lon,hop.lat];
+        		point.path = i;
+        		points.push(point);
+        	}
+        	if(path.length > 1){
+            	for(var j=0;j < path.length - 1;j++){
+            		var from = path[j];
+            		var to = path[j+1];
+            		var line = {};
+            		line.from = [from.lon,from.lat];
+            		line.to = [to.lon,to.lat];
+            		line.path = i;
+            		lines.push(line);
+            	}
+        	}
+        	for(var j=0;j < path.length;j++){
+        		var point = path[j];
+					if(point.lon > maxx){
+						maxx = point.lon;
+					}
+					if(point.lon < minx){
+						minx = point.lon;
+					}
+					if(point.lat > maxy){
+						maxy = point.lat;
+					}
+					if(point.lat < miny){
+						miny = point.lat;
+					}
+        	}
+    	}
+		
+
+        if(moveline == null){
+            //ip定位显示数据格式
+            var opt = {
+
+                //线条宽度
+                lineWidth: 2,
+                //线条颜色
+                strokeStyle: '#FFFF78',
+                //移动点半径
+                moveLineWidth:5,
+                //移动点颜色
+                moveLineColor:'#FFFF78',
+                //移动点阴影颜色
+                moveLineShadowColor: '#FFFFFF',
+                //移动点阴影大小
+                moveLineShadowBlur: 10,
+            };
+        	moveline = new MoveLine(map, opt);
+        }
+        moveline.clear();
+        moveline.addData({
+            //要显示的点
+            //经纬度、类型(起点、中间点、终点)、所属路径
+            points:points,
+            //线段起点、线段终点、所属路径
+            lines:lines,
+        });
+        
+        //var extent = [minx,miny,maxx,maxy];
+        var minp,maxp;
+        minp = new OpenLayers.LonLat(minx,miny).transform(
+                new OpenLayers.Projection("EPSG:4326"),
+                map.getProjectionObject());
+        maxp = new OpenLayers.LonLat(maxx,maxy).transform(
+                new OpenLayers.Projection("EPSG:4326"),
+                map.getProjectionObject());
+
+    	var bbox = new OpenLayers.Bounds(minp.lon,minp.lat,maxp.lon,maxp.lat);
+    	//map.zoomTo(map.getZoomForExtent(bbox));
+    	map.zoomToExtent(bbox);
+    }
+    function queryinfo(){
+    	//var input = $("#IP_input");
+    	var inuu= document.getElementById('IP_input');
+    	var ip = inuu.value;
+    	$("#information").hide();
+    	$("#information td").text("");
+    	querypath(ip);
+	   	$.ajax({
+		   	url: "ip/info?ip=" + ip,
+	   		success:function(data){
+	   			var obj = JSON.parse(data);
+	   			
+	   			$("#target_ip").text(obj.ip);
+	   			$("#geo_level").text(obj.geo_level);
+	   			$("#method").text(obj.method);
+	   			$("#ASN").text(obj.ASN);
+	   			$("#ISP").text(obj.ISP);
+	   			$("#country_name").text(obj.country_name);
+	   			$("#city_name").text(obj.city_name);
+	   			
+	   			$("#information").fadeIn();
+	   		}
+		});
+    }
     
         var base_layer = new OpenLayers.Layer.OSM("OpenStreetMap", null, {
                         transitionEffect: "resize",
@@ -183,8 +307,9 @@
                             }
                         }
                     });
+        var map = null;
         function init() {
-            var map = new OpenLayers.Map({
+            map = new OpenLayers.Map({
                 div: "map",
                 theme: null,
                 controls: [
@@ -205,40 +330,7 @@
                 map.getProjectionObject()
             ), 5);
             
-            //ip定位显示数据格式
-            var opt = {
-                //要显示的点
-                //经纬度、类型(起点、中间点、终点)、所属路径
-                points:[
-                    {lonlat:['113.270793', '23.135308'],type:0,path:1},
-                    {lonlat:['119.612787', '29.317599'],type:-1,path:1},
-                    {lonlat:['116.413554', '39.911013'],type:-1,path:1},
-                    {lonlat:['109.518646', '18.258217'],type:-1,path:1},
-                    {lonlat:['113.603757', '24.816174'],type:1,path:1},
-                    
-                ],
-                //线段起点、线段终点、所属路径
-                lines:[
-                    {from:['113.270793', '23.135308'],to:['119.612787', '29.317599'],path:1},
-                    {from:['119.612787', '29.317599'],to:['116.413554', '39.911013'],path:2},
-                    {from:['116.413554', '39.911013'],to:['109.518646', '18.258217'],path:2},
-                    {from:['109.518646', '18.258217'],to:['113.603757', '24.816174'],path:2},
-                ],
-                //线条宽度
-                lineWidth: 2,
-                //线条颜色
-                strokeStyle: '#FFFF78',
-                //移动点半径
-                moveLineWidth:5,
-                //移动点颜色
-                moveLineColor:'#FFFF78',
-                //移动点阴影颜色
-                moveLineShadowColor: '#FFFFFF',
-                //移动点阴影大小
-                moveLineShadowBlur: 10,
-            };
-            
-            var moveline = new MoveLine(map, opt);
+
         }
 
         if (document.all) {

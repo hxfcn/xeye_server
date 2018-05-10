@@ -193,7 +193,8 @@ var MoveLine = function MoveLine(map, userOptions) {
 
             map.addLayer(baseCanvasLayer);
             map.addLayer(animateLayer);
-
+            this.markers = [];
+            this.markLines = [];
             (function drawFrame() {
                 requestAnimationFrame(drawFrame);
                 lineTool.animation();
@@ -204,7 +205,7 @@ var MoveLine = function MoveLine(map, userOptions) {
             if (!context) {
                 return;
             }
-            lineTool.addMarkLine();
+
             context.clearRect(0, 0, context.canvas.width, context.canvas.height);
             lineTool.markLines.forEach(function (line) {
                 line.draw(context);
@@ -227,9 +228,6 @@ var MoveLine = function MoveLine(map, userOptions) {
             if (!context) {
                 return;
             }
-
-
-            lineTool.addMarker();
 
             context.save();
             context.fillStyle = 'rgba(0,0,0,.97)';
@@ -256,7 +254,7 @@ var MoveLine = function MoveLine(map, userOptions) {
         addMarker: function addMarker() {
             var self = this;
             if (self.markers && self.markers.length > 0) return;
-            self.markers = [];
+            
             var dataset = defaultOpts.points;
             dataset.forEach(function (point, i) {
                 var marker = point.lonlat;
@@ -265,6 +263,8 @@ var MoveLine = function MoveLine(map, userOptions) {
                 if(point.type == 1){
                 	size = 15;
                 	color = '#4ff';
+                }else if(point.type == 0){
+                	color = '#f0f';
                 }
                 self.markers.push(new Marker({
                     lonlat: new OpenLayers.LonLat(marker[0], marker[1]).transform(new OpenLayers.Projection("EPSG:4326"), map.getProjectionObject()),
@@ -277,6 +277,20 @@ var MoveLine = function MoveLine(map, userOptions) {
     };
 
     lineTool.init();
+    self.lineTool = lineTool;
+    self.clear= function(){
+    	this.lineTool.markers = [];
+    	this.lineTool.markLines = [];
+    	defaultOpts.lines = [];
+    	defaultOpts.points = [];
+    }
+    self.addData= function(data){
+    	defaultOpts.lines = data.lines;
+    	defaultOpts.points = data.points;
+        this.lineTool.addMarkLine();
+        this.lineTool.addMarker();
+        this.lineTool.baseCanvasLayer.render();
+    }
 };
 
 return MoveLine;
