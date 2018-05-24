@@ -252,9 +252,9 @@
 
                var v = 0.299 * r+ 0.587 * g + 0.114 *b;
                
-               pix[i] = 200 - r;
+               pix[i] = 180 - r;
                pix[i+1] = 220 - g;
-               pix[i+2] = 255 - b;
+               pix[i+2] = 280 - b;
                pix[i+3] = 255;
                
            }
@@ -312,14 +312,15 @@
                 url:'http://127.0.0.1:15000/data/google/roadmap/{z}/{x}/{y}.png'
             })
           });*/
-          /*var googleMapLayer = new ol.layer.Tile({  
+          var baselayer = new ol.layer.Tile({  
               source: new ol.source.XYZ({  
                   url: 'http://www.google.cn/maps/vt/pb=!1m4!1m3!1i{z}!2i{x}!3i{y}!2m3!1e0!2sm!3i380072576!3m8!2szh-CN!3scn!5e1105!12m4!1e68!2m2!1sset!2sRoadmap!4e0!5m1!1e0'  
+                  ,crossOrigin:''
               })  
-          }); */ 
-        var baselayer = new ol.layer.Tile({
-            source: new ol.source.OSM()
           });
+          /*var baselayer = new ol.layer.Tile({
+            source: new ol.source.OSM()
+          });*/
           baselayer.on('postcompose', function(event) {
             convolve(event.context);
           });
