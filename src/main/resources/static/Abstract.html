@@ -1,0 +1,100 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <!-- 引入 ECharts 文件 -->
+    <script src="js/abstract/echarts.js"></script>
+    <script src="js/abstract/chalk.js"></script>
+    <script src="js/abstract/shine.js"></script>
+    <script src="js/abstract/world.js"></script>
+    <script src="js/abstract/jquery.js"></script>
+
+    <link rel="stylesheet" href="./css/abstract_style.css" type="text/css">
+    <title>Abstract Page</title>
+</head>
+<body>
+<!-- 为 ECharts 准备一个具备大小（宽高）的 DOM -->
+<div id="Home_Charts"  ></div>
+<div id="IP_Charts" class="Charts_page" ></div>
+<div id="Landmark_Charts" class="Charts_page" ></div>
+<div id="Topologie_Charts" class="Charts_page" ></div>
+<div id="Wifi_Charts" class="Charts_page" ></div>
+<div id="RealResource_Charts" class="Charts_page" ></div>
+
+<script src="js/MyCharts.js"></script>
+<!--<script type="text/javascript">-->
+    <!--// 基于准备好的dom，初始化echarts实例-->
+    <!--var IP_Charts = echarts.init(document.getElementById('IP_Charts'));-->
+    <!--// 指定图表的配置项和数据-->
+    <!--var IP_Charts_option = {-->
+        <!--title: {-->
+            <!--text: 'IP地理位置数据',-->
+            <!--x:'left'-->
+        <!--},-->
+        <!--tooltip: {-->
+            <!--trigger: 'item',-->
+            <!--position: ['40%','40%'],-->
+            <!--formatter: function (params, ticket, callback) {-->
+                <!--$.get('detail?name=' + params.name, function (content) {-->
+                    <!--callback(ticket, toHTML(content));-->
+                <!--});-->
+                <!--var str=params.name+'<br>';-->
+                <!--for(var i=0;i<this.IP_Charts_option.radar.indicator.length;i++) {-->
+                    <!--str=str+this.IP_Charts_option.radar.indicator[i].name+":"+params.value[i]+'%';-->
+                    <!--if(i!=this.IP_Charts_option.radar.indicator.length-1)-->
+                        <!--str=str+"<br>";-->
+                <!--}-->
+                <!--return str;-->
+            <!--}-->
+        <!--},-->
+        <!--legend: {-->
+            <!--orient: 'vertical',-->
+            <!--data: ['准确率', 'IP比例'],-->
+            <!--right:2,-->
+            <!--bottom:2-->
+
+        <!--},-->
+        <!--radar: {-->
+            <!--// shape: 'circle',-->
+            <!--name: {-->
+                <!--textStyle: {-->
+                    <!--color: '#fff',-->
+                    <!--backgroundColor: '#999',-->
+                    <!--borderRadius: 3,-->
+                    <!--padding: [3, 5]-->
+                <!--}-->
+            <!--},-->
+            <!--shape: 'circle',-->
+            <!--splitNumber: 5,-->
+            <!--bottom:2,-->
+            <!--center:['48%','55%'],-->
+            <!--indicator: [-->
+                <!--{ name: '美国', max: 100},-->
+                <!--{ name: '台湾', max: 100},-->
+                <!--{ name: '韩国', max: 100},-->
+                <!--{ name: '中国', max: 100},-->
+                <!--{ name: '日本', max: 100}-->
+            <!--]-->
+        <!--},-->
+        <!--series: [{-->
+            <!--name: '准确率 vs IP比例',-->
+            <!--type: 'radar',-->
+            <!--// areaStyle: {normal: {}},-->
+            <!--data : [-->
+                <!--{-->
+                    <!--value : [81, 81, 81, 85, 91],-->
+                    <!--name : '准确率'-->
+                <!--},-->
+                <!--{-->
+                    <!--value : [30, 41, 31, 50, 20],-->
+                    <!--name : 'IP比例'-->
+                <!--}-->
+            <!--]-->
+        <!--}]-->
+    <!--};-->
+
+    <!--// 使用刚指定的配置项和数据显示图表。-->
+    <!--IP_Charts.setOption(IP_Charts_option);-->
+<!--</script>-->
+</body>
+</html>

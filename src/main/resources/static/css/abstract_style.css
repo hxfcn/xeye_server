@@ -1,0 +1,66 @@
+html, body {
+    font-size: 100%;
+    width: 100%;
+    height: 100%;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+    vertical-align: baseline;
+
+    background: url(../ImageResources/Abstract/background.jpg) bottom;
+
+    /*background-image: url(../ImageResources/IP-Location/閺佸牊鐏夐崶锟�.jpg);*/
+    position: relative;
+    bottom: 0px;
+    background-size: cover;
+    background-repeat: no-repeat;
+
+    margin: 0;
+    padding: 0;
+    overflow: hidden;
+    z-index: 200;
+}
+
+.Charts_page{
+    position:absolute;
+    width:25vw;
+    height:32vh;
+    background-color:  rgba(255,255,255,0.1);  
+    opacity: 0.9;
+    border-width: 3px;
+    z-inde:1000;
+}
+
+#Home_Charts{
+	position:absolute;
+	width:100vw;
+	height:98vh;
+	Z-index:100;
+	opacity: 0.6;
+	/*left:25.5vw;
+	top:1vh;*/
+}
+
+
+#IP_Charts{
+    left:0.5vw;
+    top:1vh;
+}
+#Landmark_Charts{
+    left:0.5vw;
+    top:34vh;
+}
+
+#Topologie_Charts{
+     left:0.5vw;
+     top:67vh;
+ }
+
+#Wifi_Charts{
+    right:0.5vw;
+    top:1vh;
+}
+
+#RealResource_Charts{
+    right:0.5vw;
+    top:34vh;
+}

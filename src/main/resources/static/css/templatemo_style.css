@@ -30,10 +30,10 @@ html, body {
     -webkit-font-smoothing: antialiased;
     -moz-osx-font-smoothing: grayscale;
     vertical-align: baseline;
-    /*鏁堟灉鍥�*/
+    /*é–ºä½¸ç‰Šéå¤å´¶é”Ÿï¿½*/
     background: url(../ImageResources/Frame/background.png) bottom;
-    /*IP瀹氫綅鏁堟灉鍥�*/
-    /*background-image: url(../ImageResources/IP-Location/鏁堟灉鍥�.jpg);*/
+    /*IPéŽè§„çŸ®ç¼å‘´å¼«é«ç†ºäº¯é–¸ãƒ¯æ‹·*/
+    /*background-image: url(../ImageResources/IP-Location/é–ºä½¸ç‰Šéå¤å´¶é”Ÿï¿½.jpg);*/
     position: relative;
     bottom: 0px;
     background-size: cover;
@@ -135,7 +135,7 @@ h6 {
     float: left;
     text-align: center;
     color: white;
-    font-size: 3.5vh;
+    font-size: 1.0em;
     line-height: 16vh;
     z-index: 1000;
     position: relative;
@@ -163,17 +163,17 @@ h6 {
     background-color: transparent;
     /*border: 1px solid red;*/
     margin: 0.5vh 0px 0px 0px;
-    /*padding: 2.65vh 0vh 1.55vh 0vh;*/
+    padding: 2.0vh 0vh 1.55vh 0vh;
     /*height: 8.5vh;*/
     width: 11.4vw;
     float: left;
     text-align: center;
-    line-height: 8.5vh;
+    line-height: 5.5vh;
     color: white;
     border: 0px;
     cursor: pointer;
     /*font-size: 1.1em;*/
-    font-size: 2.5vh;
+    font-size: 1.2em;
     outline: none;
 
     text-transform: uppercase;
@@ -200,7 +200,7 @@ h6 {
     cursor: pointer;
     /*font-size: 18px;*/
     outline: none;
-    font-size: 2.7vh;
+    font-size: 1.3em;
 
     text-transform: uppercase;
     border: 0;
@@ -210,7 +210,7 @@ h6 {
 .main-menu ul li a:hover {
     background-size: 101%;
     /*font-size: 1.2em;*/
-    font-size: 2.75vh;
+    font-size: 1.35em;
 }
 
 /* ==========================================================================
@@ -309,7 +309,7 @@ h6 {
     background-color: transparent;
     background-repeat: no-repeat;
     /*font-size: 0.8em;*/
-    font-size: 1.9vh;
+    font-size: 0.8em;
     text-align: left;
     color: white;
     /*width: 16vw;*/
@@ -365,7 +365,7 @@ h6 {
     background-size: 100% 100%;
     background-color: transparent;
     background-repeat: no-repeat;
-    font-size: 2.3vh;
+    font-size: 1.0em;
     text-align: center;
     color: white;
     width: 15vw;
@@ -439,7 +439,7 @@ h6 {
     background-size: 100% 100%;
     background-color: transparent;
     background-repeat: no-repeat;
-    font-size: 2.3vh;
+    font-size: 0.95em;
     text-align: center;
     color: white;
     width: 20vw;
@@ -526,15 +526,15 @@ h6 {
 }
 
 /* ==========================================================================
-    鎷撴墤鎺㈡祴 Styling
+    é–¹é”‹æŒ»æ¾§ã‚‰å¹’éŠï¼„ã‚´ Styling
 ========================================================================== */
 
 /* ==========================================================================
-    寰俊瀹氫綅 Styling
+    ç€µé‚¦å–•æ·‡å©„ï¿½è§„çŸ®ç¼ï¿½ Styling
 ========================================================================== */
 
 /* ==========================================================================
-    鎺㈡祴婧� Styling
+    é–¹æ’åžºç»æ‘â”ƒé”Ÿï¿½ Styling
 ========================================================================== */
 
 input, textarea {
