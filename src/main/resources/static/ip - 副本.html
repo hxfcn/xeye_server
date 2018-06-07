@@ -1,0 +1,391 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <title>目标定位</title>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <link rel="stylesheet" href="./css/openlayers/style.css" type="text/css">
+    <link rel="stylesheet" href="./css/templatemo_style.css" type="text/css">
+    
+    <script type="text/javascript" src="./js/OpenLayers.js"></script>
+    <script type="text/javascript" src="./js/openlayers-line.js"></script>
+    <script type="text/javascript" src="./js/jquery.js"></script>
+</head>
+
+<body>
+
+   <div class="site-header">
+    <div class="container">
+        <div class="row">
+            <div class="main-menu">
+                <ul>
+                    <div class="blank-border"></div>
+                    <li>
+                        <a id="IP-Location" class="current" href="ip.html">目标定位</a>
+                    </li>
+                    <div class="blank"></div>
+                    <li>
+                        <a id="Landmark" href="landmark.html">地标挖掘</a>
+                    </li>
+                    <div class="blank"></div>
+                    <li>
+                        <a>拓扑探测</a>
+                    </li>
+                    <div class="blank"></div>
+                   	<li>
+                        <a class="titleButton" href="Abstract.html">网络空间实体资源测绘平台</a>
+                    </li>
+                    <div class="blank"></div>
+                    <li>
+                        <a>结构分析</a>
+                    </li>
+                    <div class="blank"></div>
+                    <li>
+                        <a>XX功能</a>
+                    </li>
+                    <div class="blank"></div>
+                    <li>
+                        <a>XX功能</a>
+                    </li>
+                    <div class="blank-border"></div>
+                </ul>
+            </div>
+        </div>
+    </div>
+</div>
+<div class="frameRow" name="page">
+    <div class="frameImage"></div>
+    <div id="IP_Location_Page">
+        <div id="searchInput">
+            <input id="IP_input" type="text"  name="IP" value="12.217.64.130" placeholder="请输入IP地址">
+            <button id="searchButton" onclick='queryinfo()' ></button>
+        </div>
+        <div id="information" style="display:none">
+            <table id="IP_Information">
+                <tr>
+                    <th>目标IP:</th>
+                    <td id="target_ip">219.85.23.10</td>
+                </tr>
+                <tr>
+                    <th>定位级别:</th>
+                    <td id="geo_level">定位到街道级别</td>
+                </tr>
+                <tr>
+                    <th>定位方法:</th>
+                    <td id="method">100</td>
+                </tr>
+                <tr>
+                    <th>AS号:</th>
+                    <td id="ASN">181182</td>
+                </tr>
+                <tr>
+                    <th>ISP:</th>
+                    <td id="ISP">地面采集</td>
+                </tr>
+            </table>
+            <table id="IP_GEO_Information">
+                <tr>
+                    <th>国家:</th>
+                    <td id="country_name">中国</td>
+                </tr>
+                <tr>
+                    <th>城市:</th>
+                    <td id="city_name">台南市</td>
+                </tr>
+                <tr>
+                    <th>经度:</th>
+                    <td>120.198783</td>
+                </tr>
+                <tr>
+                    <th>纬度:</th>
+                    <td>22.989832</td>
+                </tr>
+            </table>
+        </div>
+    </div>
+    <div id="map"></div>
+   	<div id='simple_ipinfo' class="mywidget">
+		<div class="head">信息</div>
+		<div class="body">
+			<table id = "simple_ip_table" class="mytable" style="width:300px">
+                <tr>
+                    <td style="width:100px">IP地址:</td>
+                    <td id="simple_ipinfo_ip"></td>
+                </tr>
+			</table>
+			<table id = "target_ip_table" class="mytable" style="width:300px;display:none">
+                <tr>
+                    <td style="width:100px">IP地址:</td><td id="target_ip_ip"></td>
+                </tr>
+                <tr>
+                    <td>国家:</td><td id="target_ip_country"></td>
+                </tr>
+                <tr>
+                    <td>城市:</td><td id="target_ip_city"></td>
+                </tr>
+                <tr>
+                    <td>经度:</td><td id="target_ip_lon"></td>
+                </tr>
+                <tr>
+                    <td>维度:</td><td id="target_ip_lat"></td>
+                </tr>
+			</table>
+		</div>
+		<div class="buttom"></div>
+	</div>
+</div>
+    <script type="text/javascript">
+
+    
+    function querypath(ip){
+	   	$.ajax({
+		   	url: "ip/router?ip=" + ip,
+	   		success:function(data){
+	   			var obj = JSON.parse(data);
+	   			querypathcallback(obj);
+	   		}
+		});
+    }
+    
+    var moveline = null;
+    function querypathcallback(paths){
+    	
+    	var minx = 0,miny = 0,maxx = 0,maxy = 0,centx = 0;centy = 0;
+    	var points = [];
+    	var lines = [];
+    	for(var i=0;i < paths.length;i++){
+    		var path = paths[i];
+    		if(path.length > 0){
+    			var hop = path[0];
+        		var point = {};
+        		point.type = 0;
+        		point.lonlat = [hop.lon,hop.lat];
+        		point.path = i;
+        		point.ip = hop.ip;
+        		points.push(point);
+        		minx = hop.lon;
+        		maxx = hop.lon;
+        		miny = hop.lat;
+        		maxy = hop.lat;
+    		}
+    		if(path.length > 1){
+    			var hop = path[path.length - 1];
+        		var point = {};
+        		point.type = 1;
+        		point.lonlat = [hop.lon,hop.lat];
+        		point.path = i;
+        		point.ip = hop.ip;
+        		points.push(point);
+        		centx = hop.lon;
+        		centy = hop.lat;
+    		}
+        	for(var j=1;j < path.length - 1;j++){
+        		var hop = path[j];
+        		var point = {};
+        		point.type = -1;
+        		point.lonlat = [hop.lon,hop.lat];
+        		point.path = i;
+        		point.ip = hop.ip;
+        		points.push(point);
+        	}
+        	if(path.length > 1){
+            	for(var j=0;j < path.length - 1;j++){
+            		var from = path[j];
+            		var to = path[j+1];
+            		var line = {};
+            		line.from = [from.lon,from.lat];
+            		line.to = [to.lon,to.lat];
+            		line.path = i;
+            		lines.push(line);
+            	}
+        	}
+        	for(var j=0;j < path.length;j++){
+        		var point = path[j];
+					if(point.lon > maxx){
+						maxx = point.lon;
+					}
+					if(point.lon < minx){
+						minx = point.lon;
+					}
+					if(point.lat > maxy){
+						maxy = point.lat;
+					}
+					if(point.lat < miny){
+						miny = point.lat;
+					}
+        	}
+    	}
+		
+
+        if(moveline == null){
+            //ip定位显示数据格式
+            var opt = {
+
+                //线条宽度
+                lineWidth: 2,
+                //线条颜色
+                strokeStyle: '#FFFF78',
+                //移动点半径
+                moveLineWidth:3,
+                //移动点颜色
+                moveLineColor:'#FFFFFF',
+                //移动点阴影颜色
+                moveLineShadowColor: '#FFFFFF',
+                //移动点阴影大小
+                moveLineShadowBlur: 10,
+               
+            };
+        	moveline = new MoveLine(map, opt);
+        }
+        moveline.clear();
+        moveline.addData({
+            //要显示的点
+            //经纬度、类型(起点、中间点、终点)、所属路径
+            points:points,
+            //线段起点、线段终点、所属路径
+            lines:lines,
+        });
+        
+        //var extent = [minx,miny,maxx,maxy];
+        var minp,maxp;
+        var ww = 10;
+        minp = new OpenLayers.LonLat(centx - ww,centy - ww).transform(
+                new OpenLayers.Projection("EPSG:4326"),
+                map.getProjectionObject());
+        maxp = new OpenLayers.LonLat(centx + ww ,centy + ww).transform(
+                new OpenLayers.Projection("EPSG:4326"),
+                map.getProjectionObject());
+
+    	var bbox = new OpenLayers.Bounds(minp.lon,minp.lat,maxp.lon,maxp.lat);
+    	//map.zoomTo(map.getZoomForExtent(bbox));
+    	map.zoomToExtent(bbox);
+    }
+    var g_query_ip = null;
+    function queryinfo(){
+    	//var input = $("#IP_input");
+    	var inuu= document.getElementById('IP_input');
+    	var ip = inuu.value;
+    	$("#information").hide();
+    	$("#information td").text("");
+    	querypath(ip);
+    	g_query_ip = null;
+	   	$.ajax({
+		   	url: "ip/info?ip=" + ip,
+	   		success:function(data){
+	   			var obj = JSON.parse(data);
+	   			g_query_ip = obj;
+	   			$("#target_ip").text(obj.ip);
+	   			$("#geo_level").text(obj.geo_level);
+	   			$("#method").text(obj.method);
+	   			$("#ASN").text(obj.ASN);
+	   			$("#ISP").text(obj.ISP);
+	   			$("#country_name").text(obj.country_name);
+	   			$("#city_name").text(obj.city_name);
+	   			
+	   			$("#information").fadeIn();
+	   		}
+		});
+    }
+    
+        var base_layer = new OpenLayers.Layer.OSM("OpenStreetMap", null, {
+                        transitionEffect: "resize",
+                        attribution: "&copy; <a href='http://www.openstreetmap.org/copyright'>OpenStreetMap</a> contributors",
+                        eventListeners: {
+                            tileloaded: function(evt) {
+                                //反色
+                                var ctx = evt.tile.getCanvasContext();
+                                if (ctx) {
+                                    var imgd = ctx.getImageData(0, 0, evt.tile.size.w, evt.tile.size.h);
+                                    
+                                    
+                                    var pix = imgd.data;
+                                    var r,g,b;
+                                    for (var i = 0, n = pix.length; i < n; i += 4) {
+                                        r = pix[i];
+                                        g = pix[i+1];
+                                        b = pix[i+2];
+                                        
+                                        
+                                        
+                                        var v = 0.299 * r+ 0.587 * g + 0.114 *b;
+                                        pix[i] = 240 - r;
+                                        pix[i+1] = 300 - g;
+                                        pix[i+2] = 330 - b;
+
+                                    }
+                                    ctx.putImageData(imgd, 0, 0);
+                                    
+                                    
+                                    evt.tile.imgDiv.removeAttribute("crossorigin");
+                                    evt.tile.imgDiv.src = ctx.canvas.toDataURL();
+                                }
+                            }
+                        }
+                    });
+           
+   
+        var map = null;
+        function init() {
+            map = new OpenLayers.Map({
+                div: "map",
+                theme: null,
+                controls: [
+                    new OpenLayers.Control.Navigation(),
+                    new OpenLayers.Control.Attribution(),
+                    new OpenLayers.Control.TouchNavigation({
+                        dragPanOptions: {
+                            enableKinetic: true
+                        }
+                    }),
+                    new OpenLayers.Control.Zoom()
+                ],
+                layers: [base_layer]
+            });
+            
+            map.setCenter(new OpenLayers.LonLat(113.270793, 29.135308).transform(
+                new OpenLayers.Projection("EPSG:4326"),
+                map.getProjectionObject()
+            ), 5);
+            
+            map.events.register("mouseup", map, onMapClick);
+            
+        }
+
+        if (document.all) {
+            window.attachEvent('onload', init);
+        } else {
+            window.addEventListener('load', init, false);
+        }
+        
+        function onMapClick(e){
+        	$("#simple_ipinfo").hide();
+        	if(moveline != null){
+        		var marker = moveline.pickMarker(e.xy.x,e.xy.y);
+        		if(marker == null) return;
+        		var headtitle = "路由IP";
+        		if(marker.type == 1 && g_query_ip != null){
+        			$("#target_ip_table").attr("style","width:300px");
+        			$("#simple_ip_table").attr("style","display:none");
+    	   			$("#target_ip_ip").text(g_query_ip.ip);
+    	   			$("#target_ip_country").text(g_query_ip.country_name);
+    	   			$("#target_ip_city").text(g_query_ip.city_name);
+    	   			$("#target_ip_lon").text(marker.lonlat[0] + '');
+    	   			$("#target_ip_lat").text(marker.lonlat[1] + '');
+    	   			headtitle = "目标IP信息"
+        		}else{
+        			$("#target_ip_table").attr("style","display:none");
+        			$("#simple_ip_table").attr("style","width:300px");
+        			$("#simple_ipinfo_ip").text(marker.ip);
+        		}
+        		if(marker.type == 0){
+        			headtitle = "源IP";
+        		}
+        		$("#simple_ipinfo .head").text(headtitle);
+                $("#simple_ipinfo").css("left",e.xy.x+1);
+                $("#simple_ipinfo").css("top",e.xy.y + 40);
+        		$("#simple_ipinfo").fadeIn();
+        	}
+        }
+    </script>
+</body>
+</html>
