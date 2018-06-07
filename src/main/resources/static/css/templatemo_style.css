@@ -30,10 +30,10 @@ html, body {
     -webkit-font-smoothing: antialiased;
     -moz-osx-font-smoothing: grayscale;
     vertical-align: baseline;
-    /*é–ºä½¸ç‰Šéå¤å´¶é”Ÿï¿½*/
+    /*茅鈥撀好ぢ铰该р�芭犆┞惵徝ヂぢ惷ヂ绰睹┾�澟该柯�*/
     background: url(../ImageResources/Frame/background.png) bottom;
-    /*IPéŽè§„çŸ®ç¼å‘´å¼«é«ç†ºäº¯é–¸ãƒ¯æ‹·*/
-    /*background-image: url(../ImageResources/IP-Location/é–ºä½¸ç‰Šéå¤å´¶é”Ÿï¿½.jpg);*/
+    /*IP茅聬沤猫搂鈥灻嘎悸嵜モ�樎疵ヂ悸┞嵚р�犅好ぢ郝┾�撀该Ｆ捖︹�孤�*/
+    /*background-image: url(../ImageResources/IP-Location/茅鈥撀好ぢ铰该р�芭犆┞惵徝ヂぢ惷ヂ绰睹┾�澟该柯�.jpg);*/
     position: relative;
     bottom: 0px;
     background-size: cover;
@@ -122,12 +122,13 @@ h6 {
     z-index: 1;
 }
 
-.titleButton {
+.main-menu ul li .titleButton {
     background-image: url(../ImageResources/Frame/title.png);
     background-size: 100% 100%;
     background-position: right bottom, left top;
     background-repeat: no-repeat;
-    /*padding: 5.2vh 0vh 6vh 0vh;*/
+    padding: 0.5vh 0vh 1vh 0vh;
+    margin: 0.25vh 0px 0px 0px;
     /*padding: 22px 0px 6px 0px;*/
     width: 24.7vw;
     /*height:16vh;*/
@@ -135,8 +136,8 @@ h6 {
     float: left;
     text-align: center;
     color: white;
-    font-size: 1.0em;
-    line-height: 16vh;
+    font-size: 1.4em;
+    line-height: 14vh;
     z-index: 1000;
     position: relative;
 }
@@ -210,7 +211,7 @@ h6 {
 .main-menu ul li a:hover {
     background-size: 101%;
     /*font-size: 1.2em;*/
-    font-size: 1.35em;
+    /*font-size: 1.35em;*/
 }
 
 /* ==========================================================================
@@ -239,6 +240,15 @@ h6 {
     /*top: 9vh;*/
     /*margin: 0px;*/
 }
+ .jump{
+	position: absolute;
+    right:3vw;
+    top:12vh;
+    z-index:200;
+}
+.jump .img{
+	 z-index:200;
+}
 
 #map {
     width: 100%;
@@ -255,12 +265,14 @@ h6 {
 ========================================================================== */
 /*------Search Table------*/
 #searchInput {
-    background-image: url(../ImageResources/IP-Location/searchframe.png);
-    background-size: 100%,100%;
+    /*background-image: url(../ImageResources/IP-Location/searchframe.png);*/
+    background-image: url(../ImageResources/IP-Location/2.png);
+    background-size: 100%;
     background-color: transparent;
     background-repeat: no-repeat;
+    opacity: 0.50;
     width: 16vw;
-    height: 11vh;
+    height: 12vh;
     /*height: auto;*/
     position: absolute;
     left: 2.5vw;
@@ -304,7 +316,8 @@ h6 {
 
 /*------Information Table------*/
 #information {
-    background-image: url(../ImageResources/IP-Location/Text_frame.png);
+    /*background-image: url(../ImageResources/IP-Location/Text_frame.png);*/
+     background-image: url(../ImageResources/IP-Location/1.png);
     background-size:  100% 100%;
     background-color: transparent;
     background-repeat: no-repeat;
@@ -526,15 +539,15 @@ h6 {
 }
 
 /* ==========================================================================
-    é–¹é”‹æŒ»æ¾§ã‚‰å¹’éŠï¼„ã‚´ Styling
+    茅鈥撀姑┾�濃�姑ε捖幻β韭ｂ�氣�懊ヂ光�櫭┡犅徝尖�灻ｂ�毬� Styling
 ========================================================================== */
 
 /* ==========================================================================
-    ç€µé‚¦å–•æ·‡å©„ï¿½è§„çŸ®ç¼ï¿½ Styling
+    莽鈧得┾�毬γモ�撯�⒚β封�∶ヂ┾�灻柯矫р�灻嘎悸嵜柯� Styling
 ========================================================================== */
 
 /* ==========================================================================
-    é–¹æ’åžºç»æ‘â”ƒé”Ÿï¿½ Styling
+    茅鈥撀姑β佲�櫭ヅ韭好宦伱β濃�樏⑩�澠捗┾�澟该柯� Styling
 ========================================================================== */
 
 input, textarea {

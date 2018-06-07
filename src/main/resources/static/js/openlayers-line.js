@@ -92,7 +92,12 @@ var MoveLine = function MoveLine(map, userOptions) {
         //移动步长
         moveSteps:500.0,
         
-        colors:[],
+        colors:[
+        	'#ecc2a6',
+        	'#b5d9df',
+        	'#75b4d2',
+        	'#cbfd4b'
+        ],
         
         getColor:function(path){
         	var color = this.colors[path];
@@ -119,6 +124,8 @@ var MoveLine = function MoveLine(map, userOptions) {
         this.max = opts.max || 20;
         this.color = opts.color || defaultOpts.strokeStyle;
         this.path = opts.path;
+        this.img = new Image();
+        this.img.src="ImageResources/Landmark/4.png";
     }
 
     Marker.prototype.draw = function (context) {
@@ -133,7 +140,12 @@ var MoveLine = function MoveLine(map, userOptions) {
         context.closePath();
         context.restore();
     };
-
+    Marker.prototype.drawImage = function (context) {
+        context.save();
+        var pixel = map.getPixelFromLonLat(this.lonlat);
+        context.drawImage(this.img,pixel.x-8, pixel.y - 16,15,18 );
+        context.restore();
+    };
     function MarkLine(opts) {
         this.name = opts.name;
         this.from = opts.from;
@@ -226,6 +238,11 @@ var MoveLine = function MoveLine(map, userOptions) {
             lineTool.markLines.forEach(function (line) {
                 line.draw(context);
             });
+            
+            lineTool.markers.forEach(function (marker) {
+                marker.drawImage(context);
+            });
+            
         },
         addMarkLine: function addMarkLine() {
             var self = this;
@@ -276,12 +293,12 @@ var MoveLine = function MoveLine(map, userOptions) {
             dataset.forEach(function (point, i) {
                 var marker = point.lonlat;
                 var color = defaultOpts.strokeStyle;
-                var size = 5;
+                var size = 10;
                 if(point.type == 1){
-                	size = 20;
+                	size = 21;
                 	color = '#4ff';
                 }else if(point.type == 0){
-                	 size = 10;
+                	 size = 15;
                 	color = '#f0f';
                 }
                 self.markers.push(new Marker({
@@ -302,7 +319,12 @@ var MoveLine = function MoveLine(map, userOptions) {
     	this.lineTool.markLines = [];
     	defaultOpts.lines = [];
     	defaultOpts.points = [];
-    	defaultOpts.colors = [];
+    	defaultOpts.colors = [
+        	'#ecc2a6',
+        	'#b5d9df',
+        	'#75b4d2',
+        	'#cbfd4b'
+        ];
     }
     self.addData= function(data){
     	defaultOpts.lines = data.lines;

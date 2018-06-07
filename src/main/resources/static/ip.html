@@ -2,7 +2,7 @@
 <html>
 
 <head>
-    <title>IP Location</title>
+    <title>目标定位</title>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
     <link rel="stylesheet" href="./css/openlayers/style.css" type="text/css">
     <link rel="stylesheet" href="./css/templatemo_style.css" type="text/css">
@@ -21,23 +21,23 @@
                 <ul>
                     <div class="blank-border"></div>
                     <li>
-                        <a id="IP-Location" class="current" href="ip.html">IP定位</a>
+                        <a id="IP-Location" class="current" href="ip.html">目标定位</a>
                     </li>
                     <div class="blank"></div>
                     <li>
-                        <a id="Landmark" href="dibiao.html">地标数据</a>
+                        <a id="Landmark" href="landmark.html">地标挖掘</a>
                     </li>
                     <div class="blank"></div>
                     <li>
                         <a>拓扑探测</a>
                     </li>
                     <div class="blank"></div>
-                   <li>
-                        <div class="titleButton">网络空间实体资源测绘平台</div>
+                   	<li>
+                        <a class="titleButton" href="Abstract.html">网络空间实体资源测绘平台</a>
                     </li>
                     <div class="blank"></div>
                     <li>
-                        <a>XX功能</a>
+                        <a>结构分析</a>
                     </li>
                     <div class="blank"></div>
                     <li>
@@ -150,7 +150,7 @@
     var moveline = null;
     function querypathcallback(paths){
     	
-    	var minx = 0,miny = 0,maxx = 0,maxy = 0;
+    	var minx = 0,miny = 0,maxx = 0,maxy = 0,centx = 0;centy = 0;
     	var points = [];
     	var lines = [];
     	for(var i=0;i < paths.length;i++){
@@ -176,6 +176,8 @@
         		point.path = i;
         		point.ip = hop.ip;
         		points.push(point);
+        		centx = hop.lon;
+        		centy = hop.lat;
     		}
         	for(var j=1;j < path.length - 1;j++){
         		var hop = path[j];
@@ -231,6 +233,7 @@
                 moveLineShadowColor: '#FFFFFF',
                 //移动点阴影大小
                 moveLineShadowBlur: 10,
+               
             };
         	moveline = new MoveLine(map, opt);
         }
@@ -245,10 +248,11 @@
         
         //var extent = [minx,miny,maxx,maxy];
         var minp,maxp;
-        minp = new OpenLayers.LonLat(minx,miny).transform(
+        var ww = 10;
+        minp = new OpenLayers.LonLat(centx - ww,centy - ww).transform(
                 new OpenLayers.Projection("EPSG:4326"),
                 map.getProjectionObject());
-        maxp = new OpenLayers.LonLat(maxx,maxy).transform(
+        maxp = new OpenLayers.LonLat(centx + ww ,centy + ww).transform(
                 new OpenLayers.Projection("EPSG:4326"),
                 map.getProjectionObject());
 
@@ -304,11 +308,10 @@
                                         
                                         
                                         var v = 0.299 * r+ 0.587 * g + 0.114 *b;
-                                        
-                                        pix[i] = 200 - r;
-                                        pix[i+1] = 220 - g;
-                                        pix[i+2] = 255 - b;
-                                        
+                                        pix[i] = 240 - r;
+                                        pix[i+1] = 300 - g;
+                                        pix[i+2] = 330 - b;
+
                                     }
                                     ctx.putImageData(imgd, 0, 0);
                                     
@@ -319,6 +322,8 @@
                             }
                         }
                     });
+           
+   
         var map = null;
         function init() {
             map = new OpenLayers.Map({
@@ -342,7 +347,7 @@
                 map.getProjectionObject()
             ), 5);
             
-            map.events.register("click", map, onMapClick);
+            map.events.register("mouseup", map, onMapClick);
             
         }
 
