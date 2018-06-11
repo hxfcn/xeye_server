@@ -36,6 +36,8 @@ public class IPService {
     		String city_name = (String)r.get("city_name");
     		String ASN = (String)r.get("ASN");
     		String ISP = (String)r.get("ISP");
+    		String lon = String.valueOf(r.get("longtitude"));
+    		String lat = String.valueOf(r.get("latitude"));
 
     		obj.put("ip", ip);
     		obj.put("geo_level", geo_level);
@@ -44,6 +46,8 @@ public class IPService {
     		obj.put("city_name", city_name);
     		obj.put("ASN", ASN);
     		obj.put("ISP", ISP);
+    		obj.put("lon", lon);
+    		obj.put("lat", lat);
     	}
     	return obj.toJSONString();
     }

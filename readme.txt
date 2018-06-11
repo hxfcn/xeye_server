@@ -55,6 +55,35 @@
     "geo_level": "city-level",
     "ISP": "Knet Techonlogy (Beijing) Co. Ltd.",
     "country_name": "United States",
-    "ASN": "34741"
+    "ASN": "34741",
+    "lon"："",
+    "lat":""
+}
+
+5.拓扑输入查询
+地址：/topology/query?ip={ip}
+参数：{ip}:所要查询的目标ip
+返回：
+{
+    source:[
+        {
+            "ip": "12.217.64.130",
+            "lon": -97.822,
+            "lat": 37.751,
+            "city":"ZZ",
+            "nation":"cn",
+            "type":"cn",
+            "path":[
+                {"ip","sy","as"},
+                {"ip","sy","as"},
+            ]
+        }
+    ],
+    target:{
+        "ip":"123"
+    },
+    relation:{
+        
+    }
 }
 

@@ -13,7 +13,7 @@ public class IPController {
 	@Autowired
 	private IPService ipService;
 	
-    @RequestMapping(value="/ip/router")  
+    @RequestMapping(value="/ip/router") 
     public String requestRouter(@RequestParam String ip) {  
     	//System.out.println("Start query!");
     	String res = "";
