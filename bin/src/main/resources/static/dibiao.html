@@ -2,7 +2,7 @@
 <html>
 
 <head>
-    <title>地标挖掘</title>
+    <title>地标显示</title>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
     <!--<link rel="stylesheet" href="./css/openlayers/style.css" type="text/css">
     <script type="text/javascript" src="./js/OpenLayers.js"></script>
@@ -41,27 +41,27 @@
                 <ul>
                     <div class="blank-border"></div>
                     <li>
-                        <a id="IP-Location" href="ip.html">目标定位</a>
+                        <a id="IP-Location" href="ip.html">IP定位</a>
                     </li>
                     <div class="blank"></div>
                     <li>
-                        <a id="Landmark" class="current" href="landmark.html">地标挖掘</a>
+                        <a id="Landmark" class="current" href="dibiao.html">地标数据</a>
                     </li>
                     <div class="blank"></div>
                     <li>
-                        <a href="http://39.104.120.69:3000/ip" target="_blank" >拓扑探测</a>
+                        <a>拓扑探测</a>
+                    </li>
+                    <div class="blank"></div>
+                   <li>
+                        <div class="titleButton">网络空间实体资源测绘平台</div>
                     </li>
                     <div class="blank"></div>
                     <li>
-                         <a class="titleButton" href="Abstract.html">网络空间实体资源测绘平台</a>
+                        <a>XX功能</a>
                     </li>
                     <div class="blank"></div>
                     <li>
-                        <a href="myprotocol://C:\Users\lenovo\Desktop\myprotocol.reg">结构分析</a>
-                    </li>
-                    <div class="blank"></div>
-                    <li>
-                        <a href="http://111.204.219.223:8020/report/eye/index" target="_blank" >资源发现</a>
+                        <a>XX功能</a>
                     </li>
                     <div class="blank"></div>
                     <li>
@@ -69,7 +69,6 @@
                     </li>
                     <div class="blank-border"></div>
                 </ul>
-                <a class='jump' href="myprotocol://C:\Users\lenovo\Desktop\myprotocol.reg"><img src='ImageResources/Landmark/home.png' height="50" width="50"></img></a>
             </div>
         </div>
     </div>
@@ -77,15 +76,13 @@
 
 <div class="frameRow" name="page">
 
-    <div class="frameImage">
-    
-    </div>
+    <div class="frameImage"></div>
     <div id="IP_Location_Page">
   
 		<div id='city_ipinfo' class="mywidget">
 			<div class="head">IP段信息</div>
 			<div class="body">
-				<table class="mytable" style="width:250px">
+				<table class="mytable" style="width:300px">
 					<tr><td></td></tr>
 					<tr><td></td></tr>
 					<tr><td></td></tr>
@@ -141,7 +138,7 @@
 			</div>
 		</div>
     </div>
-    <div id="map"></div>
+   <div id="map"></div>
 </div>
 
     <script type="text/javascript">
@@ -153,10 +150,10 @@
     	var ci = new ol.style.Style({
             image: new ol.style.Icon({
             	src:'ImageResources/Landmark/' + i + '.png',
-            	scale:i==4?1:1.4
+            	scale:1.0
             }),
             text:new ol.style.Text({
-            	font:'14px 微软雅黑',
+            	font:'12px 微软雅黑',
             	fill : new ol.style.Fill({
             		color:'#fff'
             	}),
@@ -345,11 +342,15 @@
         map.on('singleclick', function(e) {
         	$("#Street").hide();
         	$("#city_ipinfo").hide();
+        	var flagg = false;
         	 map.forEachFeatureAtPixel(e.pixel, function(f,layer) {
+        		 if(flagg == true) return;
+        		 
         		 if(g_level == 4){
         			 showStreet(f,e.pixel);
         		 }else if(g_level == 3){
         			 showCityIP(f,e.pixel);
+        			 flagg = true;
         		 }
         		 
                });

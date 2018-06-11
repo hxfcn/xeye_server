@@ -7,10 +7,9 @@
     <link rel="stylesheet" href="./css/openlayers/style.css" type="text/css">
     <link rel="stylesheet" href="./css/templatemo_style.css" type="text/css">
     
-    <script type="text/javascript" src="./js/ol.js"></script>
-    <script type="text/javascript" src="./js/xiulayer.js"></script>
+    <script type="text/javascript" src="./js/OpenLayers.js"></script>
+    <script type="text/javascript" src="./js/openlayers-line.js"></script>
     <script type="text/javascript" src="./js/jquery.js"></script>
-    <script type="text/javascript" src="./js/common.js"></script>
 </head>
 
 <body>
@@ -29,29 +28,27 @@
                         <a id="Landmark" href="landmark.html">地标挖掘</a>
                     </li>
                     <div class="blank"></div>
-                     <li>
-                        <a href="http://39.104.120.69:3000/ip" target="_blank" >拓扑探测</a>
+                    <li>
+                        <a>拓扑探测</a>
+                    </li>
+                    <div class="blank"></div>
+                   	<li>
+                        <a class="titleButton" href="Abstract.html">网络空间实体资源测绘平台</a>
                     </li>
                     <div class="blank"></div>
                     <li>
-                         <a class="titleButton" href="Abstract.html">网络空间实体资源测绘平台</a>
+                        <a>结构分析</a>
                     </li>
                     <div class="blank"></div>
                     <li>
-                        <a href="myprotocol://C:\Users\lenovo\Desktop\myprotocol.reg">结构分析</a>
+                        <a>XX功能</a>
                     </li>
                     <div class="blank"></div>
                     <li>
-                        <a href="http://111.204.219.223:8020/report/eye/index" target="_blank" >资源发现</a>
-                    </li>
-                    <div class="blank"></div>
-                    <li>
-                        <a>WiFi/基站定位</a>
+                        <a>XX功能</a>
                     </li>
                     <div class="blank-border"></div>
                 </ul>
-                 <a class='jump' href="myprotocol://C:\Users\lenovo\Desktop\myprotocol.reg" style='font-size:20px;color:#5555aa'>进入子系统</a>
-            
             </div>
         </div>
     </div>
@@ -97,11 +94,11 @@
                 </tr>
                 <tr>
                     <th>经度:</th>
-                    <td id="inf_lon">120.198783</td>
+                    <td>120.198783</td>
                 </tr>
                 <tr>
                     <th>纬度:</th>
-                    <td id="inf_lat">22.989832</td>
+                    <td>22.989832</td>
                 </tr>
             </table>
         </div>
@@ -139,8 +136,7 @@
 </div>
     <script type="text/javascript">
 
-    var epsg4326 = ol.proj.get('EPSG:4326');
-    var epsg3857 = ol.proj.get('EPSG:3857');
+    
     function querypath(ip){
 	   	$.ajax({
 		   	url: "ip/router?ip=" + ip,
@@ -151,7 +147,7 @@
 		});
     }
     
-    var xiulayer = null;
+    var moveline = null;
     function querypathcallback(paths){
     	
     	var minx = 0,miny = 0,maxx = 0,maxy = 0,centx = 0;centy = 0;
@@ -164,7 +160,6 @@
         		var point = {};
         		point.type = 0;
         		point.lonlat = [hop.lon,hop.lat];
-        		point.lonlat = ol.proj.transform(point.lonlat, epsg4326,epsg3857);
         		point.path = i;
         		point.ip = hop.ip;
         		points.push(point);
@@ -178,7 +173,6 @@
         		var point = {};
         		point.type = 1;
         		point.lonlat = [hop.lon,hop.lat];
-        		point.lonlat = ol.proj.transform(point.lonlat, epsg4326,epsg3857);
         		point.path = i;
         		point.ip = hop.ip;
         		points.push(point);
@@ -190,7 +184,6 @@
         		var point = {};
         		point.type = -1;
         		point.lonlat = [hop.lon,hop.lat];
-        		point.lonlat = ol.proj.transform(point.lonlat, epsg4326,epsg3857);
         		point.path = i;
         		point.ip = hop.ip;
         		points.push(point);
@@ -201,9 +194,7 @@
             		var to = path[j+1];
             		var line = {};
             		line.from = [from.lon,from.lat];
-            		line.from = ol.proj.transform(line.from, epsg4326,epsg3857);
             		line.to = [to.lon,to.lat];
-            		line.to = ol.proj.transform(line.to, epsg4326,epsg3857);
             		line.path = i;
             		lines.push(line);
             	}
@@ -226,11 +217,28 @@
     	}
 		
 
-        if(xiulayer == null){
-        	xiulayer = new XiuLayer(map);
+        if(moveline == null){
+            //ip定位显示数据格式
+            var opt = {
+
+                //线条宽度
+                lineWidth: 2,
+                //线条颜色
+                strokeStyle: '#FFFF78',
+                //移动点半径
+                moveLineWidth:3,
+                //移动点颜色
+                moveLineColor:'#FFFFFF',
+                //移动点阴影颜色
+                moveLineShadowColor: '#FFFFFF',
+                //移动点阴影大小
+                moveLineShadowBlur: 10,
+               
+            };
+        	moveline = new MoveLine(map, opt);
         }
-        xiulayer.clear();
-        xiulayer.setData({
+        moveline.clear();
+        moveline.addData({
             //要显示的点
             //经纬度、类型(起点、中间点、终点)、所属路径
             points:points,
@@ -241,16 +249,17 @@
         //var extent = [minx,miny,maxx,maxy];
         var minp,maxp;
         var ww = 10;
-        minp = ol.proj.transform([centx - ww,centy - ww], epsg4326,epsg3857);
-        maxp = ol.proj.transform([centx + ww,centy + ww], epsg4326,epsg3857);
-    	var bbox = [minp[0],minp[0],maxp[0],maxp[1]];
-    	
-    	var res = map.getView().getResolutionForExtent(bbox);
-    	res =  map.getView().getZoomForResolution(res);
-    	map.getView().setCenter(ol.proj.transform([centx,centy], epsg4326,epsg3857));
-    	map.getView().setZoom(res+2);
-    }
+        minp = new OpenLayers.LonLat(centx - ww,centy - ww).transform(
+                new OpenLayers.Projection("EPSG:4326"),
+                map.getProjectionObject());
+        maxp = new OpenLayers.LonLat(centx + ww ,centy + ww).transform(
+                new OpenLayers.Projection("EPSG:4326"),
+                map.getProjectionObject());
 
+    	var bbox = new OpenLayers.Bounds(minp.lon,minp.lat,maxp.lon,maxp.lat);
+    	//map.zoomTo(map.getZoomForExtent(bbox));
+    	map.zoomToExtent(bbox);
+    }
     var g_query_ip = null;
     function queryinfo(){
     	//var input = $("#IP_input");
@@ -272,40 +281,86 @@
 	   			$("#ISP").text(obj.ISP);
 	   			$("#country_name").text(obj.country_name);
 	   			$("#city_name").text(obj.city_name);
-	   			$("#inf_lon").text(obj.lon);
-	   			$("#inf_lat").text(obj.lat);
+	   			
 	   			$("#information").fadeIn();
 	   		}
 		});
     }
-    var baselayer = new ol.layer.Tile({  
-        source: new ol.source.XYZ({  
-            url: 'http://www.google.cn/maps/vt/pb=!1m4!1m3!1i{z}!2i{x}!3i{y}!2m3!1e0!2sm!3i380072576!3m8!2szh-CN!3scn!5e1105!12m4!1e68!2m2!1sset!2sRoadmap!4e0!5m1!1e0'  
-            ,crossOrigin:''
-        })  
-    });
-    baselayer.on('postcompose', function(event) {
-        convolve(event.context);
-    });
-    var map = new ol.Map({
-        layers: [
-            baselayer
-        ],
-        target: 'map',
-        view: new ol.View({
-            center: ol.proj.transform([116,36], epsg4326,epsg3857),
-            zoom: 3,
-            maxZoom: 10
-        })
-    });      
-	map.on('click', function(e) {
-		onMapClick(e);
-    });
+    
+        var base_layer = new OpenLayers.Layer.OSM("OpenStreetMap", null, {
+                        transitionEffect: "resize",
+                        attribution: "&copy; <a href='http://www.openstreetmap.org/copyright'>OpenStreetMap</a> contributors",
+                        eventListeners: {
+                            tileloaded: function(evt) {
+                                //反色
+                                var ctx = evt.tile.getCanvasContext();
+                                if (ctx) {
+                                    var imgd = ctx.getImageData(0, 0, evt.tile.size.w, evt.tile.size.h);
+                                    
+                                    
+                                    var pix = imgd.data;
+                                    var r,g,b;
+                                    for (var i = 0, n = pix.length; i < n; i += 4) {
+                                        r = pix[i];
+                                        g = pix[i+1];
+                                        b = pix[i+2];
+                                        
+                                        
+                                        
+                                        var v = 0.299 * r+ 0.587 * g + 0.114 *b;
+                                        pix[i] = 240 - r;
+                                        pix[i+1] = 300 - g;
+                                        pix[i+2] = 330 - b;
 
+                                    }
+                                    ctx.putImageData(imgd, 0, 0);
+                                    
+                                    
+                                    evt.tile.imgDiv.removeAttribute("crossorigin");
+                                    evt.tile.imgDiv.src = ctx.canvas.toDataURL();
+                                }
+                            }
+                        }
+                    });
+           
+   
+        var map = null;
+        function init() {
+            map = new OpenLayers.Map({
+                div: "map",
+                theme: null,
+                controls: [
+                    new OpenLayers.Control.Navigation(),
+                    new OpenLayers.Control.Attribution(),
+                    new OpenLayers.Control.TouchNavigation({
+                        dragPanOptions: {
+                            enableKinetic: true
+                        }
+                    }),
+                    new OpenLayers.Control.Zoom()
+                ],
+                layers: [base_layer]
+            });
+            
+            map.setCenter(new OpenLayers.LonLat(113.270793, 29.135308).transform(
+                new OpenLayers.Projection("EPSG:4326"),
+                map.getProjectionObject()
+            ), 5);
+            
+            map.events.register("mouseup", map, onMapClick);
+            
+        }
+
+        if (document.all) {
+            window.attachEvent('onload', init);
+        } else {
+            window.addEventListener('load', init, false);
+        }
+        
         function onMapClick(e){
         	$("#simple_ipinfo").hide();
-        	if(xiulayer != null){
-        		var marker = xiulayer.pickMarker(e.pixel[0],e.pixel[1]);
+        	if(moveline != null){
+        		var marker = moveline.pickMarker(e.xy.x,e.xy.y);
         		if(marker == null) return;
         		var headtitle = "路由IP";
         		if(marker.type == 1 && g_query_ip != null){
@@ -314,9 +369,8 @@
     	   			$("#target_ip_ip").text(g_query_ip.ip);
     	   			$("#target_ip_country").text(g_query_ip.country_name);
     	   			$("#target_ip_city").text(g_query_ip.city_name);
-    	   			var ll = ol.proj.transform(marker.mappt,epsg3857,epsg4326);
-    	   			$("#target_ip_lon").text(ll[0] + '');
-    	   			$("#target_ip_lat").text(ll[1] + '');
+    	   			$("#target_ip_lon").text(marker.lonlat[0] + '');
+    	   			$("#target_ip_lat").text(marker.lonlat[1] + '');
     	   			headtitle = "目标IP信息"
         		}else{
         			$("#target_ip_table").attr("style","display:none");
@@ -327,8 +381,8 @@
         			headtitle = "源IP";
         		}
         		$("#simple_ipinfo .head").text(headtitle);
-                $("#simple_ipinfo").css("left",e.pixel[0]+1);
-                $("#simple_ipinfo").css("top",e.pixel[1] + 40);
+                $("#simple_ipinfo").css("left",e.xy.x+1);
+                $("#simple_ipinfo").css("top",e.xy.y + 40);
         		$("#simple_ipinfo").fadeIn();
         	}
         }

@@ -1,0 +1,97 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <title>openlayers flashmarker</title>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0, user-scalable=no">
+    <link rel="stylesheet" href="../css/openlayers/style.css" type="text/css">
+    <script type="text/javascript" src="../js/OpenLayers.js"></script>
+    <script type="text/javascript" src="../js/openlayers-line.js"></script>
+    <style>
+        html,
+        body {
+            width: 100%;
+            height: 100%;
+            margin: 0;
+            padding: 0;
+            overflow: hidden;
+        }
+
+        #map {
+            width: 100%;
+            height: 100%;
+        }
+    </style>
+</head>
+
+<body>
+    <div id="map"></div>
+    <script type="text/javascript">
+        function init() {
+            var map = new OpenLayers.Map({
+                div: "map",
+                theme: null,
+                controls: [
+                    new OpenLayers.Control.Navigation(),
+                    new OpenLayers.Control.Attribution(),
+                    new OpenLayers.Control.TouchNavigation({
+                        dragPanOptions: {
+                            enableKinetic: true
+                        }
+                    }),
+                    new OpenLayers.Control.Zoom()
+                ],
+                layers: [
+                    new OpenLayers.Layer.OSM("OpenStreetMap", null, {
+                        transitionEffect: "resize",
+                        attribution: "&copy; <a href='http://www.openstreetmap.org/copyright'>OpenStreetMap</a> contributors"
+                    })
+                ]
+            });
+
+            map.setCenter(new OpenLayers.LonLat(113.270793, 23.135308).transform(
+                new OpenLayers.Projection("EPSG:4326"),
+                map.getProjectionObject()
+            ), 5);
+            
+            var opt = {
+                points:[
+                    {lonlat:['113.270793', '23.135308'],type:1,path:1},
+                    {lonlat:['112.612787', '27.317599'],type:1,path:1},
+                    {lonlat:['116.413554', '39.911013'],type:1,path:1},
+                    {lonlat:['109.518646', '18.258217'],type:1,path:1},
+                    {lonlat:['113.603757', '24.816174'],type:1,path:1},
+                    
+                ],
+                lines:[
+                    {from:['113.270793', '23.135308'],to:['112.612787', '27.317599'],path:1},
+                    {from:['112.612787', '27.317599'],to:['116.413554', '39.911013'],path:2},
+                    {from:['116.413554', '39.911013'],to:['109.518646', '18.258217'],path:2},
+                    {from:['109.518646', '18.258217'],to:['113.603757', '24.816174'],path:2},
+                ],
+                //线条宽度
+                lineWidth: 1,
+                //线条颜色
+                strokeStyle: '#F8AB60',
+                //移动点半径
+                moveLineWidth:3,
+                //移动点颜色
+                moveLineColor:'#fff',
+                //移动点阴影颜色
+                moveLineShadowColor: '#fff',
+                //移动点阴影大小
+                moveLineShadowBlur: 5,
+            };
+            
+            var moveline = new MoveLine(map, opt);
+        }
+
+        if (document.all) {
+            window.attachEvent('onload', init);
+        } else {
+            window.addEventListener('load', init, false);
+        }
+    </script>
+</body>
+</html

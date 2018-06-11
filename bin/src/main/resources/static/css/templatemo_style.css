@@ -1,0 +1,695 @@
+/*By ZHP*/
+/* ==========================================================================
+    HTML5 styles
+   ========================================================================== */
+html,
+button,
+input,
+select,
+textarea {
+    color: #222;
+}
+
+* {
+    box-sizing: border-box;
+}
+
+.main-menu ul, .site-slider ul, ul.social {
+    padding: 0;
+    margin: 0;
+    list-style: none;
+}
+
+/* ==========================================================================
+    Structure & Defaults
+   ========================================================================== */
+html, body {
+    font-size: 100%;
+    width: 100%;
+    height: 100%;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+    vertical-align: baseline;
+    /*茅鈥撀好ぢ铰该р�芭犆┞惵徝ヂぢ惷ヂ绰睹┾�澟该柯�*/
+    background: url(../ImageResources/Frame/background.png) bottom;
+    /*IP茅聬沤猫搂鈥灻嘎悸嵜モ�樎疵ヂ悸┞嵚р�犅好ぢ郝┾�撀该Ｆ捖︹�孤�*/
+    /*background-image: url(../ImageResources/IP-Location/茅鈥撀好ぢ铰该р�芭犆┞惵徝ヂぢ惷ヂ绰睹┾�澟该柯�.jpg);*/
+    position: relative;
+    bottom: 0px;
+    background-size: cover;
+    background-repeat: no-repeat;
+
+    margin: 0;
+    padding: 0;
+    overflow: hidden;
+    z-index: 200;
+}
+
+a {
+    color: #26b864;
+    text-decoration: none !important;
+    -webkit-transition: all 100ms ease-in;
+    -moz-transition: all 100ms ease-in;
+    -ms-transition: all 100ms ease-in;
+    -o-transition: all 100ms ease-in;
+    transition: all 100ms ease-in;
+}
+
+h1, h2, h3, h4, h5, h6 {
+    font-family: "Open Sans", Arial, sans-serif;
+    color: #444444;
+}
+
+h1 {
+    font-size: 2.6em;
+}
+
+h2 {
+    font-size: 2.2em;
+}
+
+h3 {
+    font-size: 1.8em;
+}
+
+h4 {
+    font-size: 1.4em;
+}
+
+h5 {
+    font-size: 1em;
+}
+
+h6 {
+    font-size: .8em;
+}
+
+/* ==========================================================================
+    Site-Header  Styling
+   ========================================================================== */
+.site-header {
+    position: fixed;
+    /*height: 30px;*/
+    width: 100%;
+    z-index: 9999;
+    background-color: transparent;
+}
+
+.container {
+    margin-right: auto;
+    margin-left: auto;
+}
+
+.row {
+    margin-left: 0px;
+    margin-right: 0px;
+}
+
+.blank-border {
+    padding: 0.5% 0.3%;
+    width: 1.5%;
+    float: left;
+}
+
+.blank {
+    padding: 1% 0%;
+    width: 0.65%;
+    float: left;
+}
+
+.main-menu {
+    position: relative;
+    z-index: 1;
+}
+
+.main-menu ul li .titleButton {
+    background-image: url(../ImageResources/Frame/title.png);
+    background-size: 100% 100%;
+    background-position: right bottom, left top;
+    background-repeat: no-repeat;
+    padding: 0.5vh 0vh 1vh 0vh;
+    margin: 0.25vh 0px 0px 0px;
+    /*padding: 22px 0px 6px 0px;*/
+    width: 24.7vw;
+    /*height:16vh;*/
+    height: auto;
+    float: left;
+    text-align: center;
+    color: white;
+    font-size: 1.4em;
+    line-height: 14vh;
+    z-index: 1000;
+    position: relative;
+}
+
+.main-menu ul {
+    position: absolute;
+    background-color: transparent;
+    width: 100vw;
+    height: auto;
+    z-index: 1;
+    pointer-events: none;
+}
+
+.main-menu ul li {
+    text-align: center;
+    pointer-events: auto;
+}
+
+.main-menu ul li a {
+    background-image: url(../ImageResources/Frame/buttonUnselect.png);
+    background-size: 100%;
+    background-position: top;
+    background-repeat: no-repeat;
+    background-color: transparent;
+    /*border: 1px solid red;*/
+    margin: 0.5vh 0px 0px 0px;
+    padding: 2.0vh 0vh 1.55vh 0vh;
+    /*height: 8.5vh;*/
+    width: 11.4vw;
+    float: left;
+    text-align: center;
+    line-height: 5.5vh;
+    color: white;
+    border: 0px;
+    cursor: pointer;
+    /*font-size: 1.1em;*/
+    font-size: 1.2em;
+    outline: none;
+
+    text-transform: uppercase;
+    border: 0;
+    display: block;
+}
+
+.main-menu ul li a.current {
+    background: url(../ImageResources/Frame/buttonSelected.png);
+    background-repeat: no-repeat;
+    background-size: 100%;
+    background-position: top;
+    background-repeat: no-repeat;
+    background-color: transparent;
+    /*margin: 0.4vh 0px 0px 0px;*/
+    /*padding: 2.65vh 0vh 1.55vh 0vh;*/
+    /*height: 8.5vh;*/
+    width: 11.4vw;
+    float: left;
+    text-align: center;
+
+    color: white;
+    border: 0px;
+    cursor: pointer;
+    /*font-size: 18px;*/
+    outline: none;
+    font-size: 1.3em;
+
+    text-transform: uppercase;
+    border: 0;
+    display: block;
+}
+
+.main-menu ul li a:hover {
+    background-size: 101%;
+    /*font-size: 1.2em;*/
+    /*font-size: 1.35em;*/
+}
+
+/* ==========================================================================
+    Frame Styling
+   ========================================================================== */
+.frameImage {
+    background-image: url(../ImageResources/Frame/frames.png);
+
+    background-repeat: no-repeat;
+    width: 100%;
+    height: 91%;
+    background-size: 100vw 91vh;
+    position: absolute;
+    left: 0vw;
+    top: 9vh;
+    margin: 0px;
+    z-index: 100;
+    pointer-events: none;
+}
+
+.frameRow {
+    /*z-index:10000;*/
+    /*height: 91%;*/
+    /*!*position: absolute;*!*/
+    /*left: 0vw;*/
+    /*top: 9vh;*/
+    /*margin: 0px;*/
+}
+ .jump{
+	position: absolute;
+    right:3vw;
+    top:12vh;
+    z-index:200;
+}
+.jump .img{
+	 z-index:200;
+}
+
+#map {
+    width: 100%;
+    height: 91%;
+    position: absolute;
+    left: 0vh;
+    top: 9vh;
+    opacity: 0.7;
+    z-index: 0;
+}
+
+/* ==========================================================================
+    IP-Location Styling
+========================================================================== */
+/*------Search Table------*/
+#searchInput {
+    /*background-image: url(../ImageResources/IP-Location/searchframe.png);*/
+    background-image: url(../ImageResources/IP-Location/2.png);
+    background-size: 100%;
+    background-color: transparent;
+    background-repeat: no-repeat;
+    opacity: 0.50;
+    width: 16vw;
+    height: 12vh;
+    /*height: auto;*/
+    position: absolute;
+    left: 2.5vw;
+    top: 17.5vh;
+    opacity: 0.9;
+    z-index: 1;
+}
+
+#searchButton {
+    background-image: url(../ImageResources/IP-Location/search.png);
+    background-size: 90%;
+    background-color: transparent;
+    background-repeat: no-repeat;
+    border: none;
+    width: 4vh;
+    height: 4vh;
+    position: relative;
+    left: 9%;
+    top: 4.2vh;
+    opacity: 1.0;
+    z-index: 1;
+    cursor: pointer;
+    outline: none;
+}
+
+#IP_input {
+    background-color: transparent;
+    border: none;
+    width: 11.5vw;
+    height: auto;
+    position: relative;
+    left: 1.0vw;
+    top: 2.5vh;
+    opacity: 1.0;
+    z-index: 1;
+    /*font-size: 1em;*/
+    font-size: 2.3vh;
+    text-align: left;
+    /*line-height: 2vh;*/
+}
+
+/*------Information Table------*/
+#information {
+    /*background-image: url(../ImageResources/IP-Location/Text_frame.png);*/
+     background-image: url(../ImageResources/IP-Location/1.png);
+    background-size:  100% 100%;
+    background-color: transparent;
+    background-repeat: no-repeat;
+    /*font-size: 0.8em;*/
+    font-size: 0.8em;
+    text-align: left;
+    color: white;
+    /*width: 16vw;*/
+    width: 15.8vw;
+    height: 52vh;
+    /*height: auto;*/
+    position: absolute;
+    left: 2.6vw;
+    top: 31vh;
+    opacity: 1.0;
+    z-index: 1;
+}
+
+#information tr {
+    position: relative;
+    width: 90%;
+    height: 10%;
+}
+
+#information tr th {
+    width: 40%;
+    height:auto;
+    /*height:2.8vh;*/
+}
+
+#information tr td {
+    width: 60%;
+    /*height:2.8vh;*/
+}
+
+#IP_Information {
+    /*background-color: #26b864;*/
+    position: relative;
+    width: 12vw;
+    height: 25vh;
+    left: 2vw;
+    top: 2.0vh;
+}
+
+#IP_GEO_Information {
+    /*background-color:chocolate;*/
+    position: relative;
+    width: 12vw;
+    height: 20vh;
+    left: 2vw;
+    top: 5vh;
+}
+
+/*------Detail Table------*/
+/*------Source IP------*/
+#IP_Location_Page #source {
+    background-image: url(../ImageResources/IP-Location/IP_source-1.png);
+    background-size: 100% 100%;
+    background-color: transparent;
+    background-repeat: no-repeat;
+    font-size: 1.0em;
+    text-align: center;
+    color: white;
+    width: 15vw;
+    height: 13vh;
+    position: absolute;
+    left: 20vw;
+    top: 10vh;
+    opacity: 0.7;
+    z-index: 1;
+}
+#IP_Location_Page #source #source_title {
+    /*background-color: #26b864;*/
+    position:relative;
+    line-height: 4vh;
+    /*font-size: ;*/
+    width:5vw;
+    height:4vh;
+    left:5vw;
+    top:0.25vh;
+}
+#IP_Location_Page #source #source_IP {
+    /*background-color: #26b864;*/
+    position:relative;
+    width:13.2vw;
+    height:3.5vh;
+    line-height: 3.5vh;
+    left:0.9vw;
+    top:2.3vh;
+}
+
+/*------Router IP------*/
+#IP_Location_Page #router {
+    background-image: url(../ImageResources/IP-Location/Router-1.png);
+    background-size: 100% 100%;
+    background-color: transparent;
+    background-repeat: no-repeat;
+    font-size: 2.3vh;
+    text-align: center;
+    color: white;
+    width: 15vw;
+    height: 13vh;
+    position: absolute;
+    left: 20vw;
+    top: 25vh;
+    opacity: 0.7;
+    z-index: 1;
+}
+#IP_Location_Page #router #router_title {
+    /*background-color: #26b864;*/
+    position:relative;
+    line-height: 4vh;
+    /*font-size: ;*/
+    width:5vw;
+    height:4vh;
+    left:5vw;
+    top:0.25vh;
+}
+#IP_Location_Page #router #router_IP {
+    /*background-color: #26b864;*/
+    position:relative;
+    width:13.2vw;
+    height:3.5vh;
+    line-height: 3.5vh;
+    left:0.9vw;
+    top:2.3vh;
+}
+
+/*------Target IP------*/
+#IP_Location_Page #target {
+    background-image: url(../ImageResources/IP-Location/IP_target-1.png);
+    background-size: 100% 100%;
+    background-color: transparent;
+    background-repeat: no-repeat;
+    font-size: 0.95em;
+    text-align: center;
+    color: white;
+    width: 20vw;
+    height: 28vh;
+    position: absolute;
+    left: 20vw;
+    top: 40vh;
+    opacity: 0.7;
+    z-index: 1;
+}
+#IP_Location_Page #target #target_title {
+    /*background-color: #26b864;*/
+    position:relative;
+    line-height: 4vh;
+    /*font-size: ;*/
+    width:8vw;
+    height:4vh;
+    left:6vw;
+    top:0.2vh;
+}
+
+#IP_Location_Page #target tr {
+    /*background-color: #26b864;*/
+    position: relative;
+    width: 18vw;
+    /*height: 10%;*/
+}
+
+#IP_Location_Page #target tr th {
+    width: 4vw;
+    height:auto;
+    /*height:2.8vh;*/
+}
+
+#IP_Location_Page #target tr td {
+    width: 13.7vw;
+    /*height:2.8vh;*/
+}
+#Target_Information{
+    position: relative;
+    /*width: 12vw;*/
+    height: 20vh;
+    left: 0.9vw;
+    top: 1.5vh;
+}
+
+/*MY TABLE*/
+.mytable{
+	width:400px;
+	border-style: solid;
+	border-width: 5px;
+	border-color: transparent;
+}
+.mytable td{
+	border-color: transparent;
+	border-width: 5px;
+	background-color: #148fed;
+	height:20px
+}
+.mywidget{
+	width: fit-content;
+	position: absolute;
+	z-index:1;
+	opacity:1.0;
+	color:white;
+	display:none;
+}
+.mywidget .head{
+	height:50px;
+	background-image: url(../ImageResources/table/head.png);
+	background-size:100% 100%;
+	text-align:center;
+	padding-top:7px
+}
+.mywidget .body{
+	background-image: url(../ImageResources/table/body.png);
+	background-size:100% 100%;
+}
+.mywidget .buttom{
+	height:26px;
+	background-image: url(../ImageResources/table/buttom.png);
+	background-size:100% 100%;
+	text-align:center
+}
+
+/* ==========================================================================
+    茅鈥撀姑┾�濃�姑ε捖幻β韭ｂ�氣�懊ヂ光�櫭┡犅徝尖�灻ｂ�毬� Styling
+========================================================================== */
+
+/* ==========================================================================
+    莽鈧得┾�毬γモ�撯�⒚β封�∶ヂ┾�灻柯矫р�灻嘎悸嵜柯� Styling
+========================================================================== */
+
+/* ==========================================================================
+    茅鈥撀姑β佲�櫭ヅ韭好宦伱β濃�樏⑩�澠捗┾�澟该柯� Styling
+========================================================================== */
+
+input, textarea {
+    margin-bottom: 30px;
+    background-color: #f6f7f8;
+    padding: 14px;
+    font-size: 14px;
+    color: #838383;
+    outline: 0;
+    border: 0;
+    border-bottom: 1px solid #b5c1c9;
+    width: 100%;
+}
+
+.contact-form textarea {
+    height: 130px;
+}
+
+input.button {
+    display: inline-block;
+    width: auto;
+    background: url(../images/active-state.png) no-repeat;
+    background-position: center bottom;
+    color: #26b864;
+    font-size: 16px;
+    text-transform: uppercase;
+    font-weight: 700;
+    padding-bottom: 27px;
+    border: 0;
+}
+
+.site-footer {
+    margin-top: 120px;
+    background-color: #26b864;
+    color: white;
+    padding: 25px 0;
+}
+
+.site-footer a {
+    color: white;
+}
+
+.site-footer span {
+    margin-top: 12px;
+    display: block;
+}
+
+ul.social {
+    text-align: right;
+}
+
+ul.social li {
+    display: inline-block;
+}
+
+ul.social li a {
+    width: 40px;
+    height: 40px;
+    text-align: center;
+    line-height: 40px;
+    background-color: rgba(255, 255, 255, 0.2);
+    display: inline-block;
+}
+
+/*------------------------------------------------------
+	RESPONSIVE STYLES 
+--------------------------------------------------------*/
+@media (max-width: 991px) {
+    .main-menu, .bx-thumbnail-wrapper {
+        display: none;
+    }
+
+    .toggle-menu {
+        display: block;
+    }
+
+    .site-header .container {
+        padding: 0;
+    }
+
+    .slider-caption {
+        bottom: 80px;
+    }
+
+    .bx-controls-direction {
+        bottom: 30px;
+    }
+
+    .section-title:after {
+        display: none;
+    }
+
+    .section-title:before {
+        display: none;
+    }
+
+    .main-menu {
+        display: none;
+        border-top: 1px solid #2f2f2f;
+        text-align: left;
+    }
+
+    .main-menu ul li {
+        padding: 0;
+        margin: 0;
+        display: block;
+        border-bottom: 1px solid #2f2f2f;
+    }
+
+    .main-menu ul li:last-child {
+        border-bottom: 0;
+    }
+
+    .main-menu ul li a {
+        padding: 20px;
+        color: white;
+        text-transform: uppercase;
+        font-weight: 600;
+        font-size: 18px;
+        display: block;
+    }
+}
+
+@media (max-width: 767px) {
+    .section-title {
+        font-size: 24px;
+    }
+
+    .contact-form {
+        margin-top: 60px;
+    }
+
+    .item-large {
+        margin: 40px 0;
+    }
+
+    .slider-caption {
+        display: none;
+    }
+
+    #templatemo_logo h1 a {
+        opacity: 0;
+        filter: alpha(opacity=0);
+    }
+}
