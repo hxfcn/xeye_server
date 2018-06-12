@@ -70,18 +70,18 @@ html, body {
 
 #Topologie_Charts{
      right:0.5vw;
-     top:67vh;
+     top:1vh;
      z-index:1000;
  }
 
 #Wifi_Charts{
     right:0.5vw;
-    top:1vh;
-      z-index:1000;
+    top:67vh;
+    z-index:1000;
 }
 
 #RealResource_Charts{
     right:0.5vw;
     top:34vh;
-      z-index:1000;
+    z-index:1000;
 }

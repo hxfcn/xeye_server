@@ -18,10 +18,19 @@ function XiuMarker(){
 	this.draw = function(context){
 		if(this.img == null) {
 			this.img = new Image();
-			this.img.src="ImageResources/Landmark/4.png";
+			if (this.type == 1){
+				this.img.src="ImageResources/Landmark/5.png";
+			}
+			else if(this.type == 0){
+				this.img.src="ImageResources/Landmark/6.png";
+			}
+			else{
+				this.img.src="ImageResources/Landmark/4.png";
+			}
+			
 		}
         context.save();
-        context.drawImage(this.img,this.pixpt[0]-8, this.pixpt[1] - 16,15,18 );
+        context.drawImage(this.img,this.pixpt[0]-8, this.pixpt[1] - 16,20,24 );
         context.restore();
 	}
 	
