@@ -87,7 +87,7 @@ public class DiBiaoService {
 		 return arr.toJSONString();
     }
     public String queryStreet(float l,float b,float r,float t) {
-    	String sql = "SELECT * FROM streetip WHERE Longitude > ? AND Longitude < ? AND Latitude > ? AND Latitude < ? limit 500";
+    	String sql = "SELECT * FROM streetip WHERE Longitude > ? AND Longitude < ? AND Latitude > ? AND Latitude < ? limit 1000";
     	List<StreetDiBiaoInfo> items = myJdbcTemplate.query(sql, new StreetDiBiaoMapper(),l,r,b,t);
     	
     	JSONArray features = new JSONArray();
@@ -105,7 +105,7 @@ public class DiBiaoService {
     		properties.put("Address", item.getAddress());
     		properties.put("Organization", item.getOrganization());
     		properties.put("ServerName", item.getServerName());
-    		
+    		properties.put("type", item.getType());
     		JSONObject feature = new JSONObject();
     		feature.put("type", "Feature");
     		feature.put("properties", properties);
@@ -120,6 +120,31 @@ public class DiBiaoService {
     	geojson.put("features", features);
     	return geojson.toJSONString();
     	
+    }
+    
+    public String queryStreetRelation(String ip) {
+    	String sql = "SELECT streetip.*,b.* FROM streetip,(SELECT * FROM dbgx WHERE sip = '"+ ip
+    			+"' AND tip IN (SELECT IP FROM streetip))b " + 
+    			"WHERE streetip.IP = b.tip";
+    	List<Map<String, Object>> rows = myJdbcTemplate.queryForList(sql);
+    	
+    	JSONArray arr = new JSONArray();
+    	Iterator it = rows.iterator();
+    	while(it.hasNext()) {
+			 Map<String, Object> r = (Map<String, Object>)it.next();
+			 String ipp = (String)r.get("IP");
+			 float lon = (float)r.get("Longitude");
+			 float lat = (float)r.get("Latitude");
+			 float dis = (float)r.get("dis"); 
+			 
+			 JSONObject obj = new JSONObject();
+			 obj.put("ip", ipp);
+			 obj.put("lon", lon);
+			 obj.put("lat", lat);
+			 obj.put("dis", dis);
+			 arr.add(obj);
+    	}
+    	return arr.toJSONString();
     }
     
     public void fill() {

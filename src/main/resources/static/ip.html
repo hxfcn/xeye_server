@@ -164,6 +164,7 @@
     			var hop = path[0];
         		var point = {};
         		point.type = 0;
+        		point.imgsrc = "ImageResources/Landmark/6.png";
         		point.lonlat = [hop.lon,hop.lat];
         		point.lonlat = ol.proj.transform(point.lonlat, epsg4326,epsg3857);
         		point.path = i;
@@ -178,6 +179,7 @@
     			var hop = path[path.length - 1];
         		var point = {};
         		point.type = 1;
+        		point.imgsrc = "ImageResources/Landmark/5.png";
         		point.lonlat = [hop.lon,hop.lat];
         		point.lonlat = ol.proj.transform(point.lonlat, epsg4326,epsg3857);
         		point.path = i;
@@ -190,6 +192,7 @@
         		var hop = path[j];
         		var point = {};
         		point.type = -1;
+        		point.imgsrc = "ImageResources/Landmark/4.png";
         		point.lonlat = [hop.lon,hop.lat];
         		point.lonlat = ol.proj.transform(point.lonlat, epsg4326,epsg3857);
         		point.path = i;

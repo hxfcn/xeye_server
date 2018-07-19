@@ -61,7 +61,7 @@
 }
 
 5.拓扑输入查询
-地址：/topology/query?ip={ip}
+地址：/topology/target?ip={ip}
 参数：{ip}:所要查询的目标ip
 返回：
 {
