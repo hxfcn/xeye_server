@@ -7,7 +7,8 @@
 var Home_Charts=echarts.init(document.getElementById('Home_Charts'),'macarons');
 var Home_Charts_option = {
 	    title: {
-	    	text: '网络空间实体资源测绘平台',
+	    	//text: '网络空间实体资源测绘平台',
+	    	text: '网络空间资源测绘及可视化分析平台',
 	       // subtext: 'from United Nations, Total population, both sexes
 			// combined, as of 1 July (thousands)',
 	        // sublink: 'http://esa.un.org/wpp/Excel-Data/population.htm',
