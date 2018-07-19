@@ -10,7 +10,7 @@
     
     <link rel="stylesheet" href="./css/openlayers/ol.css" type="text/css">
     <link rel="stylesheet" href="./css/templatemo_style.css" type="text/css">
-    
+    <script type="text/javascript" src="./js/xiulayer.js"></script>
     <!-- <script type="text/javascript" src="./js/ol-debug.js"></script> -->
     <script type="text/javascript" src="./js/ol.js"></script>
     <script type="text/javascript" src="./js/jquery.js"></script>
@@ -115,6 +115,14 @@
                     <td id="street_ip"></td>
                 </tr>
                 <tr>
+                    <td>地标关系</td>
+                    <td><p style='margin:0px;cursor:pointer;font-style:italic;text-decoration:underline;' onclick='showStreetRelation()'>点击查看</p></td>
+                </tr>
+				<tr>
+                    <td>评估方法</td>
+                    <td id="street_Evamethod"></td>
+                </tr>
+                <tr>
                     <td>机构名</td>
                     <td id="street_Organization"></td>
                 </tr>
@@ -138,6 +146,7 @@
                     <td>置信度</td>
                     <td id="street_Reliability"></td>
                 </tr>
+
 				</table>
 			</div>
 			<div class="buttom">
@@ -152,7 +161,7 @@
 
     
     var g_styles = [];
-    for(var i = 1; i < 5; i++){
+    for(var i = 1; i < 7; i++){
     	var ci = new ol.style.Style({
             image: new ol.style.Icon({
             	src:'ImageResources/Landmark/' + i + '.png',
@@ -240,15 +249,132 @@
        			var count = f.get('count');
        			sty.getText().setText(count+'');
        		}
+       		if(g_level == 4){
+           		if(f.get('type') == 'slg'){
+           			sty = g_styles[4];
+           		}else if(f.get('type') == 'pg'){
+           			sty = g_styles[5];
+           		}
+       		}
        		return sty;
        	}
        });
+	var xiulayer = null;
+	function showStreetRelationLines(arr){
+		$("#Street").hide();
+		
+		var lon = parseFloat($("#street_lon").text());
+		var lat = parseFloat($("#street_lat").text());
+		var center = [lon,lat];
+		center = ol.proj.transform(center, epsg4326,epsg3857);	
+		
+		map.getView().setCenter(center);
+		if(arr.length < 1) {
+			if(xiulayer != null){
+				xiulayer.clear();
+			}
+			alert("没有收录！");
+			return;
+		};
+		
+		var from = null;
+		var lines = [];
+		var points = [];
+		var dis = 99999;
+		var dis_point = null;
+		arr.forEach(function(item,index){
+			if(from == null){
+				var f1 = (item.lon + lon) * 0.5;
+				var f2 = (item.lat + lat) * 0.5;
+				from = [f1,f2];
+				from = ol.proj.transform(from, epsg4326,epsg3857);
+			}
+			
+    		var line = {};
+    		line.from = from
+    		line.to = [item.lon,item.lat];
+    		line.to = ol.proj.transform(line.to, epsg4326,epsg3857);
+    		line.color = '#ecc2a6';
+    		lines.push(line);
+    		if(item.dis < dis){
+    			dis_point = line.to;
+    		}
+    		
+			var point = {};
+			point.showimg = false;
+			point.lonlat = line.to;
+			point.type = 0;
+			point.color = '#FDFFFC';
+			points.push(point);
+		});
 
+		{
+    		var line = {};
+    		line.from = from
+    		line.to = center;
+    		line.color = '#ecc2a6';
+    		lines.push(line);
+		}
+		if(dis_point != null){
+    		var line = {};
+    		line.from = center
+    		line.to = dis_point;
+    		line.color = '#00ff00';
+    		lines.push(line);
+		}
+		{
+			var point = {};
+			point.showimg = false;
+			point.lonlat = center;
+			point.type = 0;
+			point.color = '#FDFFFC';
+			points.push(point);
+		}
+		{
+			var point = {};
+			point.showimg = false;
+			point.lonlat = from;
+			point.type = 1;
+			point.color = '#FDFFFC';
+			points.push(point);
+		}
+        if(xiulayer == null){
+        	xiulayer = new XiuLayer(map);
+        }
+
+        xiulayer.clear();
+        xiulayer.setData({
+            //要显示的点
+            //经纬度、类型(起点、中间点、终点)、所属路径
+            points:points,
+            //线段起点、线段终点、所属路径
+            lines:lines,
+        });
+		map.getView().setCenter(center);
+	}
+	function showStreetRelation(){
+		var ip = $("#street_ip").text();
+	   	$.ajax({
+		   	url: "/dibiao/street_relation?ip=" + ip,
+	   		success:function(data){
+	   			var arr = JSON.parse(data);
+	   			showStreetRelationLines(arr);
+	   			
+	   		}
+		});
+	}
     function showStreet(f,pix){
     	$("#street_ip").text(f.get("IP"));
     	$("#street_Organization").text(f.get("Organization"));
     	$("#street_ServerName").text(f.get("ServerName"));
     	$("#street_Address").text(f.get("Address"));
+    	if(f.get("type") == 'slg'){
+    		$("#street_Evamethod").text('通过SLG算法评估');
+    	}else if(f.get("type") == 'pg'){
+    		$("#street_Evamethod").text('校正评估');
+    	}else{
+    		$("#street_Evamethod").text('');
+    	}
     	
  		var geom = f.getGeometry();
  		var coords = geom.getCoordinates();

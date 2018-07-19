@@ -6,6 +6,7 @@ public class StreetDiBiaoInfo {
 	public String Organization;
 	public String Address;
 	public String ServerName;
+	public String type;
 	public float Longitude;
 	public float Latitude;
 	
@@ -15,6 +16,12 @@ public class StreetDiBiaoInfo {
 	}
 	public void setIP(String iP) {
 		IP = iP;
+	}
+	public String getType() {
+		return type;
+	}
+	public void setType(String type) {
+		this.type = type;
 	}
 	public String getOrganization() {
 		return Organization;

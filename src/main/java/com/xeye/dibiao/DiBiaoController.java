@@ -17,6 +17,12 @@ public class DiBiaoController {
     	return "filled";
     }  
     
+    @RequestMapping(value="/dibiao/street_relation")  
+    public String street_relation(@RequestParam String ip) {  
+    	return dibiaoService.queryStreetRelation(ip);
+    }  
+    
+    
     @RequestMapping(value="/dibiao/request")  
     public String request(@RequestParam int level,@RequestParam float[] bbox) {  
     	System.out.println("Start query!");

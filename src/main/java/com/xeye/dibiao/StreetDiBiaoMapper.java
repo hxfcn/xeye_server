@@ -15,6 +15,7 @@ public class StreetDiBiaoMapper implements RowMapper<StreetDiBiaoInfo> {
 		String org = rs.getString("Organization");
 		String server = rs.getString("ServerName");
 		String adress = rs.getString("Address");
+		String type = rs.getString("type");
 		float lon = rs.getFloat("Longitude");
 		float lat = rs.getFloat("Latitude");
 
@@ -26,6 +27,8 @@ public class StreetDiBiaoMapper implements RowMapper<StreetDiBiaoInfo> {
 		item.setAddress(adress);
 		item.setLongitude(lon);
 		item.setLatitude(lat);
+
+		item.setType(type == null ? "" : type);
 		return item;
 	}
 }

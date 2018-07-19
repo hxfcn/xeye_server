@@ -11,28 +11,26 @@ function XiuMarker(){
 	this.radius = 0;
 	this.maxradius = 10;
 	this.img = null;
+	this.showimg = true;
+	this.imgsrc = '';
 	this.build= function(map){
 		this.pixpt = map.getPixelFromCoordinate(this.mappt);
 	};
 	
 	this.draw = function(context){
-		if(this.img == null) {
+		if(this.showimg == false){
+			return;
+		} 
+		
+		if(this.img == null){
 			this.img = new Image();
-			if (this.type == 1){
-				this.img.src="ImageResources/Landmark/5.png";
-			}
-			else if(this.type == 0){
-				this.img.src="ImageResources/Landmark/6.png";
-			}
-			else{
-				this.img.src="ImageResources/Landmark/4.png";
-			}
-			
+			this.img.src= this.imgsrc;
 		}
+
         context.save();
         context.drawImage(this.img,this.pixpt[0]-8, this.pixpt[1] - 16,20,24 );
         context.restore();
-	}
+	};
 	
 	this.animation = function(context){
 		if(this.pixpt == undefined){
@@ -52,7 +50,8 @@ function XiuMarker(){
         context.closePath();
         context.restore();
 	};
-}
+};
+
 function XiuLine(){
 	this.map0;
 	this.map1;
@@ -82,8 +81,6 @@ function XiuLine(){
         context.restore();
         //this.step = 0; //缩放地图时重新绘制动画
 	};
-	
-	
 	
 	this.animation = function(context){
 		if(this.path.length <1) return;
@@ -242,7 +239,7 @@ function XiuLayer(map,opts){
         		this.colors[path] = color;
         	}
         	return color;
-        }
+        },
     };
 	opts = opts | {};
 	Object.keys(opts).forEach(function (key) {
@@ -273,9 +270,7 @@ function XiuLayer(map,opts){
         });
 
 		this.adjustSize();
-		//this.vectorContext = ol.render.toContext(canvas.getContext('2d'), {size: [100, 100]});
 		var div = map.getTargetElement();
-		//div.appendChild(canvas);
 		div.appendChild(canvas);
 		div.appendChild(canvas1);
 		
@@ -292,7 +287,7 @@ function XiuLayer(map,opts){
 		self.points.forEach(function (point, i){
 			point.build(map);
 		});
-	}
+	};
 	
 	this.adjustSize = function adjustSize() {
         var size = this.map.getSize();
@@ -311,18 +306,6 @@ function XiuLayer(map,opts){
         canvas1.height = h;
         canvas1.style.width = w + 'px';
 		canvas1.style.height = h + 'px';
-		
-		/*var ctx = this.ctx;
-		var pixelRatio = 1;
-        var canvasWidth = ctx.canvas.width;
-        var canvasHeight = ctx.canvas.height;
-        ctx.canvas.width = canvasWidth * pixelRatio;
-        ctx.canvas.height = canvasHeight * pixelRatio;
-        ctx.canvas.style.width = canvasWidth + 'px';
-        ctx.canvas.style.height = canvasHeight + 'px';
-        // console.log(ctx.canvas.height, canvasHeight);
-        ctx.scale(pixelRatio, pixelRatio);*/
-
 	};
 	
 	this.animation = function(){
@@ -364,12 +347,6 @@ function XiuLayer(map,opts){
 
 		context.clearRect(0, 0, context.canvas.width, context.canvas.height);
 		
-//        context.fillStyle = 'rgba(0,0,0,.97)';
-//        var prev = context.globalCompositeOperation;
-//        context.globalCompositeOperation = 'destination-in';
-//        context.fillRect(0, 0, context.canvas.width, context.canvas.height);
-//        context.globalCompositeOperation = prev;
-		
 		var map = self.map;
 		var options = self.options;
 		{
@@ -390,7 +367,8 @@ function XiuLayer(map,opts){
 	};
 
 	this.clear = function(){
-
+		self.lines = [];
+		self.points = [];
 	};
 
 	this.setData = function(data){
@@ -400,7 +378,11 @@ function XiuLayer(map,opts){
 			var xl= new XiuLine();
 			xl.map0 = line.from;
 			xl.map1 = line.to;
-			xl.fillColor = self.options.getColor(line.path);
+			if(line.color != undefined){
+				xl.fillColor = line.color;
+			}else{
+				xl.fillColor = self.options.getColor(line.path);
+			}
 			self.lines.push(xl);
 		});
 		data.points.forEach(function (point, i){
@@ -413,9 +395,16 @@ function XiuLayer(map,opts){
             	size = 15;
             }
             xm.maxradius = size;
-            
-            var color = self.options.getColor(point.path);
-            xm.color = color;
+            xm.imgsrc = point.imgsrc;
+            if(point.showimg == false){
+            	xm.showimg = false;
+            }
+            if(point.color != undefined){
+            	xm.color = point.color;
+            }else{
+                var color = self.options.getColor(point.path);
+                xm.color = color;
+            }
             xm.ip = point.ip;
             xm.type = point.type;
             xm.mappt = point.lonlat;
