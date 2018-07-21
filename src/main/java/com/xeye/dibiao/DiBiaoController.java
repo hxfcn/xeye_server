@@ -17,8 +17,8 @@ public class DiBiaoController {
     	return "filled";
     }  
     
-    @RequestMapping(value="/dibiao/street_relation")  
-    public String street_relation(@RequestParam String ip) {  
+    @RequestMapping(value="/dibiao/streetrelation")  
+    public String streetrelation(@RequestParam String ip) {  
     	return dibiaoService.queryStreetRelation(ip);
     }  
     

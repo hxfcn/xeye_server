@@ -358,7 +358,7 @@
 	function showStreetRelation(){
 		var ip = $("#street_ip").text();
 	   	$.ajax({
-		   	url: "/dibiao/street_relation?ip=" + ip,
+		   	url: "dibiao/streetrelation?ip=" + ip,
 	   		success:function(data){
 	   			var arr = JSON.parse(data);
 	   			showStreetRelationLines(arr);
