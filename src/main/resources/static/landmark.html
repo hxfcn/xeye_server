@@ -162,7 +162,7 @@
 
     
     var g_styles = [];
-    for(var i = 1; i < 7; i++){
+    for(var i = 1; i < 8; i++){
     	var ci = new ol.style.Style({
             image: new ol.style.Icon({
             	src:'ImageResources/Landmark/' + i + '.png',
@@ -253,8 +253,10 @@
        		if(g_level == 4){
            		if(f.get('type') == 'slg'){
            			sty = g_styles[4];
-           		}else if(f.get('type') == 'pg'){
+           		}else if(f.get('type') == 'slgpg'){
            			sty = g_styles[5];
+           		}else if(f.get('type') == 'slgjz'){
+           			sty = g_styles[6];
            		}
        		}
        		return sty;
@@ -371,10 +373,12 @@
     	$("#street_Address").text(f.get("Address"));
     	if(f.get("type") == 'slg'){
     		$("#street_Evamethod").text('通过SLG算法评估');
-    	}else if(f.get("type") == 'pg'){
-    		$("#street_Evamethod").text('校正评估');
+    	}else if(f.get("type") == 'slgpg'){
+    		$("#street_Evamethod").text('SLG算法评估(误差<5km，高可靠街道级地标)');
+    	}else if(f.get("type") == 'slgjz'){
+    		$("#street_Evamethod").text('SLG算法校正');
     	}else{
-    		$("#street_Evamethod").text('');
+    		$("#street_Evamethod").text('在线地图算法挖掘，SLG算法评估排除');
     	}
     	
  		var geom = f.getGeometry();
