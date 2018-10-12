@@ -288,9 +288,11 @@
             ,crossOrigin:''
         })  
     });
+    
     baselayer.on('postcompose', function(event) {
         convolve(event.context);
     });
+    
     var map = new ol.Map({
         layers: [
             baselayer
@@ -299,7 +301,7 @@
         view: new ol.View({
             center: ol.proj.transform([116,36], epsg4326,epsg3857),
             zoom: 3,
-            maxZoom: 10
+            maxZoom: 14
         })
     });      
 	map.on('click', function(e) {
